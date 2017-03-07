@@ -6,6 +6,11 @@ module.exports = {
     name: 'String',
     email: 'String',
     firstname: 'String',
-    lastname: 'String'
+    lastname: 'String',
+
+    jobs: {
+      collection: 'job',
+      via: 'user'
+    },
   }
 };
