@@ -1,5 +1,7 @@
 module.exports.routes = {
   '/': 'HomeController.index',
 
-  '/logout': 'AuthController.logout'
+  '/logout': 'AuthController.logout',
+
+  'POST /ingest/:key': 'IngestController.ingest'
 };
