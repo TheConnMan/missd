@@ -4,6 +4,10 @@ module.exports = {
     name: 'String',
     timeout: 'Integer',
     lastActive: 'datetime',
+    expired: {
+      type: 'Boolean',
+      defaultsTo: false
+    },
 
     notifications: {
       collection: 'notification',

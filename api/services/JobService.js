@@ -17,7 +17,8 @@ var timer = new Timer({
       .populate('notifications')
       .then(job => {
         logger.info('Processing ' + job.id + ' (' + job.name + ')');
-        ExportService.process(job, job.notifications);
+        job.expired = true;
+        return Promise.all([job.save(), ExportService.process(job, job.notifications)]);
       });
     }
   }
@@ -26,12 +27,18 @@ var timer = new Timer({
 module.exports = {
   process: function(key) {
     key.lastUsed = new Date();
-    return Promise.all([key.save(), Job.findOne({ id: key.job })]).then(([key, job]) => {
+    return Promise.all([key.save(), Job.findOne({ id: key.job }).populate('notifications')]).then(([key, job]) => {
       logger.debug('Resetting ' + job.id + ' (' + job.name + ')');
       this.clear(job.id);
       this.kickoff(job);
       job.lastActive = new Date();
-      return job.save().then(() => {
+      var promises = [];
+      if (job.expired) {
+        job.expired = false;
+        promises.push(ExportService.process(job, job.notifications));
+      }
+      promises.push(job.save());
+      return Promise.all(promises).then(() => {
         return 200;
       });
     });
