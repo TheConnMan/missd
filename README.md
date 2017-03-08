@@ -64,3 +64,6 @@ docker run -d -p 3306:3306 -e MYSQL_DATABASE=sails -e MYSQL_USER=sails -e MYSQL_
 ## Additional Environment Variables
 
 - FLUENTD_HOST - If provided this project will additionally log through FluentD
+- AWS_ACCESS_KEY_ID - AWS ID for sending SES email
+- AWS_SECRET_ACCESS_KEY - AWS secret key for sending SES email
+- FROM_EMAIL - Email address notifications will be from

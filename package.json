@@ -23,6 +23,7 @@
     "include-all": "^1.0.0",
     "log4js": "^1.1.1",
     "node-distributed-timer": "^0.1.2",
+    "node-ses": "^2.0.4",
     "node-uuid": "^1.4.7",
     "passport": "^0.3.2",
     "passport-github2": "^0.1.10",
