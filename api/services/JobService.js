@@ -30,7 +30,10 @@ module.exports = {
       logger.debug('Resetting ' + job.id + ' (' + job.name + ')');
       this.clear(job.id);
       this.kickoff(job);
-      return 200;
+      job.lastActive = new Date();
+      return job.save().then(() => {
+        return 200;
+      });
     });
   },
 

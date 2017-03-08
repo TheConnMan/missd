@@ -3,6 +3,7 @@ module.exports = {
   attributes: {
     name: 'String',
     timeout: 'Integer',
+    lastActive: 'datetime',
 
     notifications: {
       collection: 'notification',
