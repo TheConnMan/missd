@@ -1,7 +1,5 @@
 FROM alpine
 
-ENV PORT 80
-
 RUN apk add --no-cache nodejs
 
 WORKDIR /usr/src/app
@@ -11,6 +9,6 @@ RUN npm install --production
 
 COPY . /usr/src/app
 
-EXPOSE 80
+EXPOSE 1337
 
-CMD node node_modules/sails/bin/sails.js lift
+CMD npm start
