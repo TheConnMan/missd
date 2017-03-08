@@ -7,7 +7,7 @@ var logger = log4js.getLogger('api/services/JobService');
 
 var timer = new Timer({
   connection: {
-    host: process.env.REDIS_HOST || 'localhost'
+    host: sails.config.globals.redisHost
   },
   tasks: {
     expire: function(id) {
