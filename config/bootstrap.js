@@ -85,5 +85,13 @@ module.exports.bootstrap = function(cb) {
     }, verifyHandler));
   }
 
-  cb();
+  Job.find().then(jobs => {
+    logger.info('Bootstrapping ' + jobs.length + ' job(s)');
+    jobs.forEach(job => {
+      logger.info('Bootstrapping off ' + job.id + ' (' + job.name + ')');
+      JobService.kickoff(job);
+    });
+
+    cb();
+  });
 };
