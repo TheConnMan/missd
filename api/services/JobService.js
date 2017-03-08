@@ -13,8 +13,11 @@ var timer = new Timer({
     expire: function(id) {
       Job.findOne({
         id: id
-      }).then(job => {
+      })
+      .populate('notifications')
+      .then(job => {
         logger.info('Processing ' + job.id + ' (' + job.name + ')');
+        ExportService.process(job, job.notifications);
       });
     }
   }
