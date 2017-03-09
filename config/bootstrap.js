@@ -85,7 +85,9 @@ module.exports.bootstrap = function(cb) {
     }, verifyHandler));
   }
 
-  Job.find().then(jobs => {
+  Job.find({
+    expired: false
+  }).then(jobs => {
     logger.info('Bootstrapping ' + jobs.length + ' job(s)');
     jobs.forEach(job => {
       logger.info('Bootstrapping off ' + job.id + ' (' + job.name + ')');
