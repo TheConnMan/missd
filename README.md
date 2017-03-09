@@ -62,9 +62,10 @@ docker run -d -p 3306:3306 -e MYSQL_DATABASE=sails -e MYSQL_USER=sails -e MYSQL_
 ```
 
 ## Additional Environment Variables
+**NOTE:** If the AWS credentials and emails settings are not injected emails notifications will not be sent
 
 - FLUENTD_HOST - If provided this project will additionally log through FluentD
 - REDIS_HOST - Redis host location
-- AWS_ACCESS_KEY_ID - AWS ID for sending SES email
-- AWS_SECRET_ACCESS_KEY - AWS secret key for sending SES email
-- FROM_EMAIL - Email address notifications will be from
+- AWS_ACCESS_KEY_ID (Optional) - AWS ID for sending SES email
+- AWS_SECRET_ACCESS_KEY (Optional) - AWS secret key for sending SES email
+- FROM_EMAIL (Optional) - Email address notifications will be from

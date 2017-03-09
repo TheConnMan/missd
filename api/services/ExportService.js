@@ -1,14 +1,18 @@
 var SlackWebhook = require('slack-webhook');
 var ses = require('node-ses');
-var emailClient = ses.createClient({
+var emailClient = sails.config.globals.emailEnabled ? ses.createClient({
   key: sails.config.globals.awsAccessKeyId,
   secret: sails.config.globals.awsSecretAccessKey
-});
+}) : null;
 
 var dateFormat = require('dateformat');
 
 var log4js = require('log4js');
 var logger = log4js.getLogger('api/services/ExportService');
+
+if (!emailClient) {
+  logger.warn('Email is not configured, email notifications will not be sent');
+}
 
 module.exports = {
   slack: function(job, notification) {
@@ -21,19 +25,24 @@ module.exports = {
 
   email: function(job, notification) {
     return new Promise((resolve, reject) => {
-      emailClient.sendEmail({
-        to: notification.data.email,
-        from: sails.config.globals.fromEmail,
-        subject: 'Miss.d: Job ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
-        message: getText(job, notification)
-      }, (err, data, res) => {
-        if (err) {
-          logger.error(err);
-          reject(err);
-        } else {
-          resolve(data);
-        }
-      });
+      if (emailClient) {
+        emailClient.sendEmail({
+          to: notification.data.email,
+          from: sails.config.globals.fromEmail,
+          subject: 'Miss.d: Job ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
+          message: getText(job, notification)
+        }, (err, data, res) => {
+          if (err) {
+            logger.error(err);
+            reject(err);
+          } else {
+            resolve(data);
+          }
+        });
+      } else {
+        logger.error('Email not configured');
+        resolve();
+      }
     });
   },
 
