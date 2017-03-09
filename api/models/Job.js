@@ -1,8 +1,16 @@
 module.exports = {
 
   attributes: {
-    name: 'String',
-    timeout: 'Integer',
+    name: {
+      type: 'String',
+      minLength: 4,
+      required: true
+    },
+    timeout: {
+      type: 'Integer',
+      min: 10,
+      required: true
+    },
     lastActive: 'datetime',
     expired: {
       type: 'Boolean',
