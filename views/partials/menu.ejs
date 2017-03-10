@@ -1,0 +1,21 @@
+<div class="ui large menu">
+  <a class="item" href="/">
+    <i class="home icon"></i>
+    Home
+  </a>
+  <div class="right menu">
+    <% if (user) { %>
+      <div class="item">
+        <%= user.name %>
+      </div>
+    <% } else { %>
+      <a class="item" href="/auths/github">
+        <i class="user icon"></i>
+        Log In
+      </a>
+    <% } %>
+    <div class="item">
+      v<%= sails.config.globals.version %>
+    </div>
+  </div>
+</div>
