@@ -45,10 +45,13 @@ module.exports = {
   },
 
   kickoff: function(job) {
+    logger.debug('Kicking off job ' + job.id + ' (' + job.name + ')');
+    timer.clear('expire', job.id);
     timer.schedule('expire', job.id, job.timeout * 1000);
   },
 
   clear: function(id) {
+    logger.debug('Clearing job ' + id);
     timer.clear('expire', id);
   }
 };

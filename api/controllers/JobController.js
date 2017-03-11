@@ -32,6 +32,7 @@ module.exports = {
       timeout: body.timeout,
       user: req.session.passport.user
     }).then(job => {
+      JobService.kickoff(job);
       return res.ok(job);
     }).catch(err => {
       return res.badRequest('Invalid attributes: ' + Object.keys(err.invalidAttributes).join(', '));
@@ -48,6 +49,7 @@ module.exports = {
         job.name = body.name;
         job.timeout = body.timeout;
         return job.save().then(() => {
+          JobService.kickoff(job);
           return res.ok(job);
         });
       } else {
@@ -65,6 +67,7 @@ module.exports = {
     }).then(job => {
       if (job) {
         return job.destroy().then(() => {
+          JobService.clear(job.id);
           return res.ok(job);
         });
       } else {
