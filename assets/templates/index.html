@@ -1,0 +1,50 @@
+<h1 class="ui dividing header">Miss.d</h1>
+<div class="ui four doubling cards">
+  <div class="card" ng-repeat="job in jobs track by job.id">
+    <a ng-if="!job.expired" class="ui green right corner label">
+      <i class="check icon"></i>
+    </a>
+    <a ng-if="job.expired" class="ui red right corner label">
+      <i class="alarm icon"></i>
+    </a>
+    <div class="content">
+      <div class="header">
+        {{job.name}}
+      </div>
+      <div class="meta">
+        <i class="mail icon"></i>
+        {{job.notifications.length}} Notifications
+      </div>
+      <h4 class="ui sub header">API Key</h4>
+      <div class="small-font">
+        {{job.key}}
+      </div>
+    </div>
+    <div class="extra content">
+      <span class="right floated">
+        <i class="history icon"></i>
+        <span ng-if="job.lastActive" am-time-ago="{{getTime(job.lastActive)}}" class="date"></span>
+        <span ng-if="!job.lastActive">Never</span>
+      </span>
+      <span>
+        <i class="hourglass start icon"></i>
+        {{formatDuration(job.timeout * 1000)}}
+      </span>
+    </div>
+    <div>
+      <div class="extra content">
+        <div class="ui two buttons">
+          <div class="ui basic blue button" ng-click="edit(job)">Edit</div>
+          <div class="ui basic red button" ng-click="delete(job)">Delete</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="content"></div>
+    <div class="ui green bottom attached button">
+      <i class="add icon"></i>
+      Add Job
+    </div>
+  </div>
+</div>

@@ -1,6 +1,11 @@
 angular
-.module('app', ['ngResource', 'angularMoment'])
-.controller('controller', function($scope, $http, $resource) {
+.module('app', ['ngResource', 'angularMoment', 'ngRoute'])
+
+.controller('MainController', function($scope, $http, $resource, $route, $routeParams, $location) {
+
+  $scope.$route = $route;
+  $scope.$location = $location;
+  $scope.$routeParams = $routeParams;
 
   var Job = $resource('/jobs/:jobId', {
     jobId: '@id'
@@ -16,6 +21,10 @@ angular
     });
   };
 
+  $scope.edit = function(job) {
+    $location.path('/job/' + job.id);
+  };
+
   $scope.getTime = function(date) {
     return new Date(date).getTime();
   };
@@ -23,4 +32,19 @@ angular
   $scope.formatDuration = function(duration) {
     return moment.duration(duration).format();
   };
+})
+
+.controller('JobController', function($scope, $routeParams, $resource) {
+  $scope.params = $routeParams;
+})
+
+.config(function($routeProvider, $locationProvider) {
+  $routeProvider
+  .when('/', {
+      templateUrl : "/templates/index.html"
+  })
+ .when('/job/:jobId', {
+    templateUrl: '/templates/job.html',
+    controller: 'JobController'
+  });
 });
