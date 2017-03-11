@@ -16,11 +16,16 @@ if (!emailClient) {
 
 module.exports = {
   slack: function(job, notification) {
-    var slack = new SlackWebhook(notification.data.slackUrl);
-    return slack.send({
-      text: getText(job, notification),
-      username: 'Miss.d'
-    });
+    if (notification.data.slackUrl) {
+      var slack = new SlackWebhook(notification.data.slackUrl);
+      return slack.send({
+        text: getText(job, notification),
+        username: 'Miss.d'
+      });
+    } else {
+      logger.error('Slack notification requires a URL: ' + notification.id);
+      return;
+    }
   },
 
   email: function(job, notification) {
