@@ -26,8 +26,7 @@ var timer = new Timer({
 
 module.exports = {
   process: function(key) {
-    key.lastUsed = new Date();
-    return Promise.all([key.save(), Job.findOne({ id: key.job }).populate('notifications')]).then(([key, job]) => {
+    return Job.findOne({ key: key }).populate('notifications').then((job) => {
       logger.debug('Resetting ' + job.id + ' (' + job.name + ')');
       this.clear(job.id);
       this.kickoff(job);

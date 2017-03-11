@@ -1,10 +1,12 @@
+var uuid = require('node-uuid');
+
 module.exports = {
 
   find: function(req, res) {
     return Job.find({
       user: req.session.passport.user
     })
-    .populate(['notifications', 'keys'])
+    .populate('notifications')
     .then(jobs => {
       return res.ok(jobs);
     });
@@ -15,7 +17,7 @@ module.exports = {
       id: req.params.id,
       user: req.session.passport.user
     })
-    .populate(['notifications', 'keys'])
+    .populate('notifications')
     .then(job => {
       if (job) {
         return res.ok(job);
@@ -30,14 +32,11 @@ module.exports = {
     return Job.create({
       name: body.name,
       timeout: body.timeout,
-      user: req.session.passport.user
+      user: req.session.passport.user,
+      key: uuid.v4()
     }).then(job => {
-      return Key.create({
-        job: job
-      }).then(key => {
-        JobService.kickoff(job);
-        return res.ok(job);
-      });
+      JobService.kickoff(job);
+      return res.ok(job);
     }).catch(err => {
       return res.badRequest('Invalid attributes: ' + Object.keys(err.invalidAttributes).join(', '));
     });

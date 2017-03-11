@@ -16,14 +16,13 @@ module.exports = {
       type: 'Boolean',
       defaultsTo: false
     },
+    key: {
+      type: 'String',
+      unique: true
+    },
 
     notifications: {
       collection: 'notification',
-      via: 'job'
-    },
-
-    keys: {
-      collection: 'key',
       via: 'job'
     },
 
