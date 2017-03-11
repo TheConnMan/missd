@@ -32,8 +32,12 @@ module.exports = {
       timeout: body.timeout,
       user: req.session.passport.user
     }).then(job => {
-      JobService.kickoff(job);
-      return res.ok(job);
+      return Key.create({
+        job: job
+      }).then(key => {
+        JobService.kickoff(job);
+        return res.ok(job);
+      });
     }).catch(err => {
       return res.badRequest('Invalid attributes: ' + Object.keys(err.invalidAttributes).join(', '));
     });
