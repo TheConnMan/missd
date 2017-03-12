@@ -45,6 +45,10 @@ angular
     $location.path('/job/new');
   };
 
+  $scope.help = function() {
+    $location.path('/help');
+  };
+
   $scope.getTime = function(date) {
     return new Date(date).getTime();
   };
@@ -138,6 +142,10 @@ angular
   };
 })
 
+.controller('HelpController', function($scope) {
+
+})
+
 .config(function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/', {
@@ -150,5 +158,9 @@ angular
  .when('/job/new', {
     templateUrl: '/templates/job.html',
     controller: 'JobController'
+  })
+ .when('/help', {
+    templateUrl: '/templates/help.html',
+    controller: 'HelpController'
   });
 });

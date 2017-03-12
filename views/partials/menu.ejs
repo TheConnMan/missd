@@ -3,6 +3,12 @@
     <i class="home icon"></i>
     Home
   </a>
+  <% if (user) { %>
+    <a class="item" ng-click="help()">
+      <i class="question icon"></i>
+      Help
+    </a>
+  <% } %>
   <div class="right menu">
     <% if (user) { %>
       <div class="item">

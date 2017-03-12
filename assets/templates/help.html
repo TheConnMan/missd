@@ -1,0 +1,13 @@
+<h1 class="ui dividing header">Using Miss.d</h1>
+<p>
+  <b>Miss.d</b> is used to send you alerts when regularly scheduled jobs don't trigger after a certain period of time.
+  Each job you create comes with an API key which your job should POST to after completion.
+  If your job does not POST to <b>Miss.d</b> within the expiration time period your job notifications are sent out.
+</p>
+<h3 class="ui dividing header">Quick Start</h3>
+<ol style="font-size: 1.25em;">
+  <li>Create a <a href="#" onclick="new()">Miss.d job</a></li>
+  <li>Create notifications for your job</li>
+  <li>Send a POST to <a ng-href="{{ingestUrl('your-api-key')}}">{{ingestUrl('your-api-key')}}</a> after each job completion</li>
+  <li>Don't worry about your job until you get a notification!</li>
+</ol>
