@@ -60,7 +60,7 @@ module.exports = {
         }).then(notification => {
           if (notification) {
             notification.name = body.name;
-            notification.timeout = body.exportType;
+            notification.exportType = body.exportType;
             notification.data = body.data;
             return notification.save().then(() => {
               return res.ok(notification);
