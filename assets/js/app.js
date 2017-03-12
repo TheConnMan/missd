@@ -101,6 +101,14 @@ angular
       if ($scope.new) {
         $scope.jobs.push(job);
         $location.path('/job/' + job.id);
+        if ($scope.jobs.length === 1) {
+          swal({
+            title: 'You created your first job!',
+            html: 'Start sending in data by sending a POST to the link below. See the help for more instructions.<br><br><a href="' + $scope.ingestUrl(job.key) + '">' + $scope.ingestUrl(job.key) + '</a>',
+            type: 'success',
+            width: '70%'
+          });
+        }
       }
       $scope.error = '';
     }).catch(function(err) {
