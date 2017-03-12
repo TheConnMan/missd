@@ -51,11 +51,12 @@
       <td>
         <div ng-if="!notification.id" class="ui green button" ng-click="save(notification)">Create</div>
         <div ng-if="notification.id" class="ui blue button" ng-click="save(notification)">Update</div>
+        <div class="ui red button" ng-click="delete(notification)">Delete</div>
       </td>
     </tr>
   </tbody>
 </table>
-<div ng-if="!new" class="ui blue labeled icon button" ng-click="newNotification()">
+<div ng-if="!new && !notificationInProgress()" class="ui blue labeled icon button" ng-click="newNotification()">
   <i class="plus icon"></i>
   New Notification
 </div>

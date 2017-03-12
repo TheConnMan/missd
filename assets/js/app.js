@@ -109,6 +109,19 @@ angular
       notification = data;
     });
   };
+
+  $scope.delete = function(notification) {
+    $scope.job.notifications.splice($scope.job.notifications.indexOf(notification), 1);
+    if (notification.id) {
+      notification.$delete();
+    }
+  };
+
+  $scope.notificationInProgress = function() {
+    return !$scope.job || !$scope.job.notifications.every(function(notification) {
+      return notification.id;
+    });
+  };
 })
 
 .config(function($routeProvider, $locationProvider) {
