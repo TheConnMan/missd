@@ -52,6 +52,10 @@ angular
   $scope.formatDuration = function(duration) {
     return moment.duration(duration).format();
   };
+
+  $scope.ingestUrl = function(key) {
+    return serverUrl + '/ingest/' + key;
+  };
 })
 
 .controller('JobController', function($scope, $routeParams, $resource, $location, $timeout) {
