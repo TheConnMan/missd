@@ -120,6 +120,8 @@ angular
 
   $scope.updateType = function(notification, type) {
     notification.exportType = type;
+    notification.data = {};
+    $scope.changeNotification(notification);
   };
 
   $scope.saveNotification = function(notification) {
@@ -133,6 +135,10 @@ angular
     if (notification.id) {
       notification.$delete();
     }
+  };
+
+  $scope.changeNotification = function(notification) {
+    notification.dirty = true;
   };
 
   $scope.notificationInProgress = function() {

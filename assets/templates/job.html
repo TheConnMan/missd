@@ -30,7 +30,7 @@
     <tr ng-repeat="notification in job.notifications track by notification.id">
       <td>
         <div class="ui input">
-          <input type="text" ng-model="notification.name">
+          <input type="text" ng-model="notification.name" ng-change="changeNotification(notification)">
         </div>
       </td>
       <td>
@@ -46,15 +46,15 @@
       </td>
       <td>
         <div ng-if="notification.exportType == 'slack'" class="ui input">
-          <input type="text" ng-model="notification.data.slackUrl" placeholder="Slack Webhook">
+          <input type="text" ng-model="notification.data.slackUrl" ng-change="changeNotification(notification)" placeholder="Slack Webhook">
         </div>
         <div ng-if="notification.exportType == 'email'" class="ui input">
-          <input type="text" ng-model="notification.data.email" placeholder="Email Address">
+          <input type="text" ng-model="notification.data.email" ng-change="changeNotification(notification)" placeholder="Email Address">
         </div>
       </td>
       <td>
         <div ng-if="!notification.id" class="ui green button" ng-click="saveNotification(notification)">Create</div>
-        <div ng-if="notification.id" class="ui blue button" ng-click="saveNotification(notification)">Update</div>
+        <button ng-if="notification.id" class="ui blue button" ng-disabled="!notification.dirty" ng-click="saveNotification(notification)">Update</button>
         <div class="ui red button" ng-click="delete(notification)">Delete</div>
       </td>
     </tr>
