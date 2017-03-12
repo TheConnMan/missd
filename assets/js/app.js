@@ -104,7 +104,7 @@ angular
     notification.exportType = type;
   };
 
-  $scope.save = function(notification) {
+  $scope.saveNotification = function(notification) {
     notification.$save(function(data) {
       notification = data;
     });
@@ -118,9 +118,9 @@ angular
   };
 
   $scope.notificationInProgress = function() {
-    return !$scope.job || !$scope.job.notifications.every(function(notification) {
+    return !$scope.job || ($scope.job.notifications && !$scope.job.notifications.every(function(notification) {
       return notification.id;
-    });
+    }));
   };
 })
 

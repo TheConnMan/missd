@@ -49,8 +49,8 @@
         </div>
       </td>
       <td>
-        <div ng-if="!notification.id" class="ui green button" ng-click="save(notification)">Create</div>
-        <div ng-if="notification.id" class="ui blue button" ng-click="save(notification)">Update</div>
+        <div ng-if="!notification.id" class="ui green button" ng-click="saveNotification(notification)">Create</div>
+        <div ng-if="notification.id" class="ui blue button" ng-click="saveNotification(notification)">Update</div>
         <div class="ui red button" ng-click="delete(notification)">Delete</div>
       </td>
     </tr>
