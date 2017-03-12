@@ -30,10 +30,11 @@ angular
   });
 
   $scope.delete = function(job) {
-    job.$delete(function(data) {
+    job.$delete().then(function(data) {
       $scope.jobs = $scope.jobs.filter(function(j) {
         return j.id !== job.id;
       });
+      $location.path('/');
     });
   };
 
