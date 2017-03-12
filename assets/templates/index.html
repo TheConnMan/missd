@@ -5,7 +5,7 @@
     Add Job
   </div>
 </h1>
-<div class="ui four doubling cards">
+<div ng-if="jobs.length != 0" class="ui four doubling cards">
   <div class="card" ng-repeat="job in jobs | orderBy: 'name' track by job.id">
     <a ng-if="!job.expired" class="ui green right corner label">
       <i class="check icon"></i>
@@ -48,3 +48,10 @@
     </div>
   </div>
 </div>
+<h2 ng-if="jobs.length == 0" class="ui icon header" style="display: block; margin: 0 auto;">
+  <i class="alarm outline icon"></i>
+  <div class="content">
+    No Jobs
+    <div class="sub header">Looks like you have no jobs, <a class="link" ng-click="new()">create one</a> or check out the <a class="link" ng-click="help()">help page</a></div>
+  </div>
+</h2>
