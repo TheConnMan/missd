@@ -17,13 +17,11 @@ Then navigate to <http://127.0.0.1:1337>. **NOTE:** Please read the OAuth sectio
 
 ## OAuth
 
-This app uses OAuth for authentication. Any combination of GitHub, Google, and Twitter is available, but the OAuth application properties must be passed in. Create a [Google app](https://cloud.google.com/console#/project), [GitHub app](https://github.com/settings/applications/new), and/or [Twitter app](https://apps.twitter.com/app/new). Make sure to use the full URL you will use to run this app during configuration.
+This app uses GitHub OAuth for authentication. Create a [GitHub app](https://github.com/settings/applications/new) and make sure to use the full URL you will use to run this app during configuration.
 
 Once the apps are created you need to pass in the Client ID and Client Secret variables as the following environment variables:
 
 - **GitHub** - GITHUB_ID, GITHUB_SECRET
-- **Google** - GOOGLE_ID, GOOGLE_SECRET
-- **Twitter** - TWITTER_KEY, TWITTER_SECRET
 
 Finally, pass in the **SERVER_URL** variable as the full URL of your application.
 
@@ -64,7 +62,7 @@ docker run -d -p 3306:3306 -e MYSQL_DATABASE=sails -e MYSQL_USER=sails -e MYSQL_
 ## Additional Environment Variables
 **NOTE:** If the AWS credentials and emails settings are not injected emails notifications will not be sent
 
-- FLUENTD_HOST - If provided this project will additionally log through FluentD
+- FLUENTD_HOST - If provided this project will log through FluentD
 - REDIS_HOST - Redis host location
 - AWS_ACCESS_KEY_ID (Optional) - AWS ID for sending SES email
 - AWS_SECRET_ACCESS_KEY (Optional) - AWS secret key for sending SES email

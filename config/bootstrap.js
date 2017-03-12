@@ -1,7 +1,4 @@
-var passport = require('passport'),
-  GitHubStrategy = require('passport-github2').Strategy,
-  GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
-  TwitterStrategy = require('passport-twitter').Strategy;
+var passport = require('passport'), GitHubStrategy = require('passport-github2').Strategy;
 
 var log4js = require('log4js');
 var logger = log4js.getLogger('config/bootstrap');
@@ -61,29 +58,11 @@ module.exports.bootstrap = function(cb) {
     });
   });
 
-  if (sails.config.oauth.github.clientID && sails.config.oauth.github.clientSecret) {
-    passport.use(new GitHubStrategy({
-      clientID: sails.config.oauth.github.clientID,
-      clientSecret: sails.config.oauth.github.clientSecret,
-      callbackURL: sails.config.serverUrl + '/auths/github/callback'
-    }, verifyHandler));
-  }
-
-  if (sails.config.oauth.google.clientID && sails.config.oauth.google.clientSecret) {
-    passport.use(new GoogleStrategy({
-      clientID: sails.config.oauth.google.clientID,
-      clientSecret: sails.config.oauth.google.clientSecret,
-      callbackURL: sails.config.serverUrl + '/auths/google/callback'
-    }, verifyHandler));
-  }
-
-  if (sails.config.oauth.twitter.consumerKey && sails.config.oauth.twitter.consumerSecret) {
-    passport.use(new TwitterStrategy({
-      consumerKey: sails.config.oauth.twitter.consumerKey,
-      consumerSecret: sails.config.oauth.twitter.consumerSecret,
-      callbackURL: sails.config.serverUrl + '/auths/twitter/callback'
-    }, verifyHandler));
-  }
+  passport.use(new GitHubStrategy({
+    clientID: sails.config.oauth.github.clientID,
+    clientSecret: sails.config.oauth.github.clientSecret,
+    callbackURL: sails.config.serverUrl + '/auths/github/callback'
+  }, verifyHandler));
 
   Job.find({
     expired: false
