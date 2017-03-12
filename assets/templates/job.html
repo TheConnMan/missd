@@ -4,6 +4,14 @@
   API Key: {{job.key}}
   <i class="popup link copy icon" clipboard supported="supported" text="ingestUrl(job.key)"  data-content="Copied" data-variation="inverted"></i>
 </h3>
+<div ng-if="error" class="ui negative message">
+  <div class="header">
+    Error Saving
+  </div>
+  <p>
+    {{error}}
+  </p>
+</div>
 <div class="ui form">
   <div class="fields">
     <div class="field">

@@ -96,11 +96,14 @@ angular
   });
 
   $scope.save = function() {
-    $scope.job.$save(function(job) {
+    $scope.job.$save().then(function(job) {
       if ($scope.new) {
         $scope.jobs.push(job);
         $location.path('/job/' + job.id);
       }
+      $scope.error = '';
+    }).catch(function(err) {
+      $scope.error = err.data;
     });
   };
 
@@ -127,8 +130,11 @@ angular
   };
 
   $scope.saveNotification = function(notification) {
-    notification.$save(function(data) {
+    notification.$save().then(function(data) {
+      $scope.error = '';
       notification = data;
+    }).catch(function(err) {
+      $scope.error = err.data;
     });
   };
 

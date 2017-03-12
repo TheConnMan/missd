@@ -40,7 +40,7 @@ module.exports = {
         }).then(notification => {
           return res.ok(notification);
         }).catch(err => {
-          return res.badRequest('Invalid attributes: ' + Object.keys(err.invalidAttributes).join(', '));
+          return res.badRequest('Invalid notification attributes: ' + Object.keys(err.invalidAttributes).join(', '));
         });
       } else {
         return res.badRequest('Invalid job ID ' + body.job);
@@ -69,7 +69,7 @@ module.exports = {
             res.notFound();
           }
         }).catch(err => {
-          return res.badRequest('Invalid attributes: ' + Object.keys(err.invalidAttributes).join(', '));
+          return res.badRequest('Invalid notification attributes: ' + Object.keys(err.invalidAttributes).join(', '));
         });
       } else {
         return res.badRequest('Invalid job ID ' + body.job);

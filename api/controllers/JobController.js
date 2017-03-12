@@ -38,7 +38,7 @@ module.exports = {
       JobService.kickoff(job);
       return res.ok(job);
     }).catch(err => {
-      return res.badRequest('Invalid attributes: ' + Object.keys(err.invalidAttributes).join(', '));
+      return res.badRequest('Invalid job attributes: ' + Object.keys(err.invalidAttributes).join(', '));
     });
   },
 
@@ -63,7 +63,7 @@ module.exports = {
         res.notFound();
       }
     }).catch(err => {
-      return res.badRequest('Invalid attributes: ' + Object.keys(err.invalidAttributes).join(', '));
+      return res.badRequest('Invalid job attributes: ' + Object.keys(err.invalidAttributes).join(', '));
     });
   },
 
