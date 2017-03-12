@@ -1,6 +1,6 @@
 {
-  "name": "Missd",
-  "version": "0.1.0",
+  "name": "Miss.d",
+  "version": "0.2.0",
   "description": "Notifications for when things don't happen",
   "dependencies": {
     "bluebird": "^3.4.7",
