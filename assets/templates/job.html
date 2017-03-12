@@ -13,3 +13,49 @@
   </div>
   <div class="ui blue button" ng-click="save()">Save</div>
 </div>
+<h2 ng-if="!new" class="ui dividing header">Notifications</h2>
+<table ng-if="!new" class="ui celled striped table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Data</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="notification in job.notifications track by notification.id">
+      <td>
+        <div class="ui input">
+          <input type="text" ng-model="notification.name">
+        </div>
+      </td>
+      <td>
+        <div class="ui selection dropdown">
+          <input type="hidden" value="{{notification.exportType}}">
+          <i class="dropdown icon"></i>
+          <div class="default text">Notification Type</div>
+          <div class="menu">
+            <div class="item" ng-click="updateType(notification, 'slack')">Slack</div>
+            <div class="item" ng-click="updateType(notification, 'email')">Email</div>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div ng-if="notification.exportType == 'slack'" class="ui input">
+          <input type="text" ng-model="notification.data.slackUrl" placeholder="Slack Webhook">
+        </div>
+        <div ng-if="notification.exportType == 'email'" class="ui input">
+          <input type="text" ng-model="notification.data.email" placeholder="Email Address">
+        </div>
+      </td>
+      <td>
+        <div ng-if="!notification.id" class="ui green button" ng-click="save(notification)">Create</div>
+        <div ng-if="notification.id" class="ui blue button" ng-click="save(notification)">Update</div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div ng-if="!new" class="ui blue labeled icon button" ng-click="newNotification()">
+  <i class="plus icon"></i>
+  New Notification
+</div>

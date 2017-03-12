@@ -38,7 +38,7 @@ angular
   };
 })
 
-.controller('JobController', function($scope, $routeParams, $resource, $location) {
+.controller('JobController', function($scope, $routeParams, $resource, $location, $timeout) {
   $scope.params = $routeParams;
 
   $scope.new = $scope.params.jobId === 'new';
@@ -47,18 +47,25 @@ angular
     jobId: '@id'
   });
 
-  var jobs = $scope.jobs.filter(function(job) {
-    return job.id == $scope.params.jobId;
+  var Notification = $resource('/notifications/:notificationId', {
+    notificationId: '@id'
   });
 
-  if (!$scope.new && jobs.length === 0) {
-    $location.path('/job/new');
-  }
-
-  $scope.job = $scope.new ? new Job({
-    name: 'New Job',
-    timeout: 3600
-  }) : jobs[0];
+  $scope.$watchCollection('jobs', function() {
+    var jobs = $scope.jobs.filter(function(job) {
+      return job.id == $scope.params.jobId;
+    });
+    if (!$scope.new && $scope.jobs.$resolved && jobs.length === 0) {
+      $location.path('/job/new');
+    }
+    $scope.job = $scope.new ? new Job({
+      name: 'New Job',
+      timeout: 3600
+    }) : jobs[0];
+    $timeout(function() {
+      $('.ui.dropdown').dropdown();
+    });
+  });
 
   $scope.save = function() {
     $scope.job.$save(function(job) {
@@ -68,6 +75,28 @@ angular
       } else {
         $location.path('/');
       }
+    });
+  };
+
+  $scope.newNotification = function() {
+    $scope.job.notifications = $scope.job.notifications || [];
+    $scope.job.notifications.push(new Notification({
+      name: 'New Notification',
+      exportType: 'email',
+      job: $scope.job.id
+    }));
+    $timeout(function() {
+      $('.ui.dropdown').dropdown();
+    });
+  };
+
+  $scope.updateType = function(notification, type) {
+    notification.exportType = type;
+  };
+
+  $scope.save = function(notification) {
+    notification.$save(function(data) {
+      notification = data;
     });
   };
 })
