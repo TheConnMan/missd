@@ -47,11 +47,15 @@ module.exports = {
     return Job.findOne({
       id: req.params.id,
       user: req.session.passport.user
-    }).then(job => {
+    })
+    .populate('notifications')
+    .then(job => {
       if (job) {
+        var notifications = job.notifications;
         job.name = body.name;
         job.timeout = body.timeout;
         return job.save().then(() => {
+          job.notifications = notifications;
           JobService.kickoff(job);
           return res.ok(job);
         });
