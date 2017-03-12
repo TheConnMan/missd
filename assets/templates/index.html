@@ -1,4 +1,10 @@
-<h1 class="ui dividing header">Miss.d</h1>
+<h1 class="ui dividing header">
+  Miss.d Jobs
+  <div class="ui green bottom button" style="float: right;" ng-click="new()">
+    <i class="add icon"></i>
+    Add Job
+  </div>
+</h1>
 <div class="ui four doubling cards">
   <div class="card" ng-repeat="job in jobs track by job.id">
     <a ng-if="!job.expired" class="ui green right corner label">
@@ -39,13 +45,6 @@
           <div class="ui basic red button" ng-click="delete(job)">Delete</div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="content"></div>
-    <div class="ui green bottom attached button" ng-click="new()">
-      <i class="add icon"></i>
-      Add Job
     </div>
   </div>
 </div>
