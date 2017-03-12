@@ -19,7 +19,7 @@
       <input type="text" ng-model="job.name" ng-change="changeJob(job)">
     </div>
     <div class="field">
-      <label>Timeout (Seconds)</label>
+      <label>Timeout ({{formatDuration(job.timeout * 1000)}})</label>
       <input type="number" min="10" ng-model="job.timeout" ng-change="changeJob(job)">
     </div>
     <div class="field">

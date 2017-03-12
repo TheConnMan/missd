@@ -54,7 +54,7 @@ angular
   };
 
   $scope.formatDuration = function(duration) {
-    return moment.duration(duration).format();
+    return moment.duration(duration).format('d [days], h [hrs], m [min], s [sec]');
   };
 
   $scope.ingestUrl = function(key) {
