@@ -13,11 +13,12 @@
       </div>
       <div class="meta">
         <i class="mail icon"></i>
-        {{job.notifications.length}} Notifications
+        {{job.notifications.length || 0}} Notifications
       </div>
       <h4 class="ui sub header">API Key</h4>
       <div class="small-font">
         {{job.key}}
+        <i class="popup link copy icon" clipboard supported="supported" text="job.key" data-content="Copied" data-variation="inverted"></i>
       </div>
     </div>
     <div class="extra content">

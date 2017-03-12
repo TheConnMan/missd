@@ -1,7 +1,7 @@
 angular
-.module('app', ['ngResource', 'angularMoment', 'ngRoute'])
+.module('app', ['ngResource', 'angularMoment', 'ngRoute', 'angular-clipboard'])
 
-.controller('MainController', function($scope, $http, $resource, $route, $routeParams, $location) {
+.controller('MainController', function($scope, $http, $resource, $route, $routeParams, $location, $timeout) {
 
   $scope.$route = $route;
   $scope.$location = $location;
@@ -20,6 +20,12 @@ angular
       job.notifications = job.notifications ? job.notifications.map(function(notification) {
         return new Notification(notification);
       }) : [];
+    });
+    $timeout(function() {
+      $('.popup').popup({
+        position: 'top center',
+        on: 'click'
+      });
     });
   });
 
@@ -74,6 +80,10 @@ angular
     }) : jobs[0];
     $timeout(function() {
       $('.ui.dropdown').dropdown();
+      $('.popup').popup({
+        position: 'top center',
+        on: 'click'
+      });
     });
   });
 

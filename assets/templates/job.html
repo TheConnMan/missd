@@ -1,5 +1,9 @@
 <h1 ng-if="new" class="ui dividing header">New Job</h1>
 <h1 ng-if="!new" class="ui dividing header">Edit Job</h1>
+<h3 ng-if="!new" class="ui header">
+  API Key: {{job.key}}
+  <i class="popup link copy icon" clipboard supported="supported" text="job.key"  data-content="Copied" data-variation="inverted"></i>
+</h3>
 <div class="ui form">
   <div class="fields">
     <div class="field">
