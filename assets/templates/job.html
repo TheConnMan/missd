@@ -36,14 +36,14 @@
 <table ng-if="!new" class="ui celled striped table">
   <thead>
     <tr>
-      <th>Type</th>
-      <th>Data</th>
+      <th class="four wide">Type</th>
+      <th class="seven wide">Data</th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="notification in job.notifications track by notification.id">
       <td>
-        <div class="ui selection dropdown">
+        <div class="ui fluid selection dropdown">
           <input type="hidden" value="{{notification.exportType}}">
           <i class="dropdown icon"></i>
           <div class="default text">Notification Type</div>
@@ -54,10 +54,10 @@
         </div>
       </td>
       <td>
-        <div ng-if="notification.exportType == 'slack'" class="ui input">
+        <div ng-if="notification.exportType == 'slack'" class="ui fluid input">
           <input type="text" ng-model="notification.data.slackUrl" ng-change="changeNotification(notification)" placeholder="Slack Webhook">
         </div>
-        <div ng-if="notification.exportType == 'email'" class="ui input">
+        <div ng-if="notification.exportType == 'email'" class="ui fluid input">
           <input type="text" ng-model="notification.data.email" ng-change="changeNotification(notification)" placeholder="Email Address">
         </div>
       </td>
