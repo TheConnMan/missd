@@ -21,11 +21,11 @@
         <i class="mail icon"></i>
         {{job.notifications.length || 0}} Notifications
       </div>
-      <h4 class="ui sub header">API Key</h4>
-      <div class="small-font">
-        {{job.key}}
+      <h4 class="ui sub header">
+        API Key
         <i class="popup link copy icon" clipboard supported="supported" text="ingestUrl(job.key)" data-content="Copied" data-variation="inverted"></i>
-      </div>
+      </h4>
+      <div class="small-font">{{job.key}}</div>
     </div>
     <div class="extra content">
       <span class="right floated">
