@@ -28,12 +28,12 @@
       <div class="small-font">{{job.key}}</div>
     </div>
     <div class="extra content">
-      <span class="right floated">
+      <span class="right floated" data-tooltip="Last Active" data-inverted="">
         <i class="history icon"></i>
         <span ng-if="job.lastActive" am-time-ago="{{getTime(job.lastActive)}}" class="date"></span>
         <span ng-if="!job.lastActive">Never</span>
       </span>
-      <span>
+      <span data-tooltip="Expiration Time" data-inverted="">
         <i class="hourglass start icon"></i>
         {{formatDuration(job.timeout * 1000)}}
       </span>
