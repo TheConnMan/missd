@@ -12,6 +12,7 @@
   <div class="right menu">
     <% if (user) { %>
       <div class="item">
+        <i class="user icon"></i>
         <%= user.name %>
       </div>
     <% } else { %>
@@ -23,5 +24,10 @@
     <div class="item">
       v<%= sails.config.globals.version %>
     </div>
+    <% if (user) { %>
+      <a href="/auths/logout" class="item">
+        Logout
+      </a>
+    <% } %>
   </div>
 </div>
