@@ -25,7 +25,7 @@
       v<%= sails.config.globals.version %>
     </div>
     <% if (user) { %>
-      <a href="/auths/logout" class="item">
+      <a onclick="logout()" href="#" class="item">
         Logout
       </a>
     <% } %>

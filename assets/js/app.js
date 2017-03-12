@@ -3,6 +3,8 @@ angular
 
 .controller('MainController', function($scope, $http, $resource, $route, $routeParams, $location, $timeout) {
 
+  localStorage.login = true;
+
   $scope.$route = $route;
   $scope.$location = $location;
   $scope.$routeParams = $routeParams;
