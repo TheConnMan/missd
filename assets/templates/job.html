@@ -8,14 +8,18 @@
   <div class="fields">
     <div class="field">
       <label>Name</label>
-      <input type="text" ng-model="job.name">
+      <input type="text" ng-model="job.name" ng-change="changeJob(job)">
     </div>
     <div class="field">
       <label>Timeout (Seconds)</label>
-      <input type="number" min="10" ng-model="job.timeout">
+      <input type="number" min="10" ng-model="job.timeout" ng-change="changeJob(job)">
+    </div>
+    <div class="field">
+      <label>&nbsp</label>
+      <button ng-if="new" class="ui green button" ng-click="save()">Create</button>
+      <button ng-if="!new" class="ui blue button" ng-disabled="!job.dirty" ng-click="save()">Save</button>
     </div>
   </div>
-  <div class="ui blue button" ng-click="save()">Save</div>
 </div>
 <h2 ng-if="!new" class="ui dividing header">Notifications</h2>
 <table ng-if="!new" class="ui celled striped table">

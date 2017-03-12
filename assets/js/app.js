@@ -100,10 +100,12 @@ angular
       if ($scope.new) {
         $scope.jobs.push(job);
         $location.path('/job/' + job.id);
-      } else {
-        $location.path('/');
       }
     });
+  };
+
+  $scope.changeJob = function(job) {
+    job.dirty = true;
   };
 
   $scope.newNotification = function() {
