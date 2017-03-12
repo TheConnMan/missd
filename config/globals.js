@@ -1,4 +1,5 @@
 module.exports.globals = {
+  version: process.env.npm_package_version,
   proxy: process.env.PROXY_URL || 'http://localhost:4200',
   proxyEnabled: process.env.PROXY_ENABLED === undefined ? false : process.env.PROXY_ENABLED === 'true',
 
