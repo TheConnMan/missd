@@ -67,7 +67,7 @@
       <td>
         <div ng-if="!notification.id" class="ui green button" ng-click="saveNotification(notification)">Create</div>
         <button ng-if="notification.id" class="ui blue button" ng-disabled="!notification.dirty" ng-click="saveNotification(notification)">Update</button>
-        <div class="ui red button" ng-click="delete(notification)">Delete</div>
+        <div class="ui red button" ng-click="deleteNotification(notification)">Delete</div>
       </td>
     </tr>
   </tbody>

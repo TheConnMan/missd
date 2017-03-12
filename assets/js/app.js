@@ -138,7 +138,7 @@ angular
     });
   };
 
-  $scope.delete = function(notification) {
+  $scope.deleteNotification = function(notification) {
     $scope.job.notifications.splice($scope.job.notifications.indexOf(notification), 1);
     if (notification.id) {
       notification.$delete();
