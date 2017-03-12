@@ -11,7 +11,17 @@ angular
     jobId: '@id'
   });
 
-  $scope.jobs = Job.query();
+  var Notification = $resource('/notifications/:notificationId', {
+    notificationId: '@id'
+  });
+
+  $scope.jobs = Job.query(function() {
+    $scope.jobs.forEach(function(job) {
+      job.notifications = job.notifications ? job.notifications.map(function(notification) {
+        return new Notification(notification);
+      }) : [];
+    });
+  });
 
   $scope.delete = function(job) {
     job.$delete(function(data) {
