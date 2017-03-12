@@ -57,7 +57,7 @@ module.exports = {
 
   process: function(job, notifications) {
     return Promise.all(notifications.map(notification => {
-      logger.debug('Exporting ' + (job.expired ? 'expire' : 'reenable') + ' ' + notification.exportType + ' notification ' + notification.name + ' (' + notification.id + ')');
+      logger.debug('Exporting ' + (job.expired ? 'expire' : 'reenable') + ' ' + notification.exportType + ' notification ' + notification.id);
       var fn = this[notification.exportType] || this.default;
       return fn(job, notification);
     }));

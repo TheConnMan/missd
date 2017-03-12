@@ -36,18 +36,12 @@
 <table ng-if="!new" class="ui celled striped table">
   <thead>
     <tr>
-      <th>Name</th>
       <th>Type</th>
       <th>Data</th>
     </tr>
   </thead>
   <tbody>
     <tr ng-repeat="notification in job.notifications track by notification.id">
-      <td>
-        <div class="ui input">
-          <input type="text" ng-model="notification.name" ng-change="changeNotification(notification)">
-        </div>
-      </td>
       <td>
         <div class="ui selection dropdown">
           <input type="hidden" value="{{notification.exportType}}">

@@ -59,7 +59,6 @@ module.exports = {
           id: req.params.id
         }).then(notification => {
           if (notification) {
-            notification.name = body.name;
             notification.exportType = body.exportType;
             notification.data = body.data;
             return notification.save().then(() => {
