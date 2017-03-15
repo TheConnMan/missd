@@ -1,5 +1,8 @@
 var passport = require('passport');
 
+var log4js = require('log4js');
+var logger = log4js.getLogger('api/controllers/AuthController');
+
 module.exports = {
 
   index: function(req, res) {
@@ -17,11 +20,12 @@ module.exports = {
     }, function(err, user) {
       req.logIn(user, function(err) {
         if (err) {
-          console.log(err);
+          logger.error(err);
           res.view('500');
           return;
         }
 
+        logger.info(user.name + ' has logged in');
         res.redirect('/');
         return;
       });
