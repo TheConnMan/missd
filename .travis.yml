@@ -1,6 +1,8 @@
 sudo: required
 
-language: javascript
+language: node_js
+node_js:
+  - "6"
 
 services:
   - docker
@@ -9,7 +11,13 @@ script:
   - docker build -t theconnman/missd .
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-      docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-      docker push theconnman/missd;
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    if [ "$TRAVIS_BRANCH" == "master" ]; then
+      VERSION=`node -e "console.log(require('./package.json').version);"`;
+      docker tag theconnman/missd theconnman/missd:$VERSION;
+      docker push theconnman/missd:latest;
+      docker push theconnman/missd:$VERSION;
+    elif [ "$TRAVIS_BRANCH" == "dev" ]; then
+      docker tag theconnman/missd theconnman/missd:latest-dev;
+      docker push theconnman/missd:latest-dev;
     fi

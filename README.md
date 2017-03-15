@@ -1,5 +1,5 @@
 # Miss.d
-Notifications for when things *don't* happen
+Notifications for when events *don't* happen
 
 ## Running
 
