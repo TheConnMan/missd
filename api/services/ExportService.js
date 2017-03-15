@@ -34,7 +34,7 @@ module.exports = {
         emailClient.sendEmail({
           to: notification.data.email,
           from: sails.config.globals.fromEmail,
-          subject: 'Miss.d: Job ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
+          subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
           message: getText(job, notification)
         }, (err, data, res) => {
           if (err) {
@@ -69,9 +69,9 @@ function getText(job, notification) {
 }
 
 function expiredText(job, notification) {
-  return 'Job ' + job.name + ' has expired, ' + (job.lastActive ? 'last active at ' + dateFormat(job.lastActive, 'mm/dd/yyyy HH:MM Z') : 'never active');
+  return job.name + ' has expired, ' + (job.lastActive ? 'last active at ' + dateFormat(job.lastActive, 'mm/dd/yyyy HH:MM Z') : 'never active');
 }
 
 function reenableText(job, notification) {
-  return 'Job ' + job.name + ' has checked in and has been reenabled';
+  return job.name + ' has checked in and has been reenabled';
 }
