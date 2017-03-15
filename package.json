@@ -43,6 +43,7 @@
     "url": "https://github.com/TheConnMan/missd.git"
   },
   "author": "TheConnMan",
+  "license": "MIT",
   "devDependencies": {
     "nodemon": "^1.11.0"
   }
