@@ -13,6 +13,10 @@ angular
     jobId: '@id'
   });
 
+  var Event = $resource('/events/:eventId', {
+    eventId: '@id'
+  });
+
   var Notification = $resource('/notifications/:notificationId', {
     notificationId: '@id'
   });
@@ -30,6 +34,8 @@ angular
       });
     });
   });
+
+  $scope.events = Event.query();
 
   $scope.delete = function(job) {
     job.$delete().then(function(data) {
@@ -50,6 +56,10 @@ angular
 
   $scope.help = function() {
     $location.path('/help');
+  };
+
+  $scope.jobEvents = function(job) {
+    return $scope.events.filter(event => event.job === job.id);
   };
 
   $scope.getTime = function(date) {
