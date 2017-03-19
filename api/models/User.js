@@ -12,5 +12,10 @@ module.exports = {
       collection: 'job',
       via: 'user'
     },
+
+    events: {
+      collection: 'event',
+      via: 'user'
+    }
   }
 };

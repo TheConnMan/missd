@@ -26,6 +26,11 @@ module.exports = {
       via: 'job'
     },
 
+    events: {
+      collection: 'event',
+      via: 'job'
+    },
+
     user: { model: 'user' }
   }
 };

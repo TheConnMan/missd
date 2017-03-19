@@ -9,8 +9,14 @@ angular
   $scope.$location = $location;
   $scope.$routeParams = $routeParams;
 
+  $scope.dataLoaded = 0;
+
   var Job = $resource('/jobs/:jobId', {
     jobId: '@id'
+  });
+
+  var Event = $resource('/events/:eventId', {
+    eventId: '@id'
   });
 
   var Notification = $resource('/notifications/:notificationId', {
@@ -18,6 +24,7 @@ angular
   });
 
   $scope.jobs = Job.query(function() {
+    $scope.dataLoaded++;
     $scope.jobs.forEach(function(job) {
       job.notifications = job.notifications ? job.notifications.map(function(notification) {
         return new Notification(notification);
@@ -29,6 +36,23 @@ angular
         on: 'click'
       });
     });
+  });
+
+  $scope.events = Event.query(() => {
+    $scope.dataLoaded++;
+  });
+
+  $scope.$on('$viewContentLoaded', function() {
+    $scope.dataLoaded++;
+    if ($scope.dataLoaded > 3) {
+      $scope.refreshDatapoints();
+    }
+  });
+
+  $scope.$watch('dataLoaded', () => {
+    if ($scope.dataLoaded === 3) {
+      $scope.refreshDatapoints();
+    }
   });
 
   $scope.delete = function(job) {
@@ -52,6 +76,10 @@ angular
     $location.path('/help');
   };
 
+  $scope.jobEvents = function(job) {
+    return $scope.events.filter(event => event.job === job.id);
+  };
+
   $scope.getTime = function(date) {
     return new Date(date).getTime();
   };
@@ -62,6 +90,51 @@ angular
 
   $scope.ingestUrl = function(key) {
     return serverUrl + '/ingest/' + key;
+  };
+
+  var hours = Array.apply(null, Array(24)).map((val, i) => {
+    return moment().startOf('hour').subtract({
+      hours: i
+    }).toDate();
+  });
+
+  $scope.refreshDatapoints = function() {
+    var jobsWithEvents = $scope.jobs.filter(job => {
+      return $scope.events.filter(event => event.job === job.id).length;
+    });
+    var columns = jobsWithEvents.map(job => {
+      var data = hours.map(date => {
+        return $scope.events.filter(event => event.job === job.id && moment(event.createdAt).startOf('hour').toDate().getTime() === date.getTime()).length;
+      }, {});
+      data.unshift(job.id + ': ' + job.name);
+      return data;
+    });
+    c3.generate({
+      bindto: '#chart',
+      size: {
+        height: 200
+      },
+      data: {
+        x: 'dates',
+        type: 'bar',
+        columns: [
+          ['dates'].concat(hours)
+        ].concat(columns),
+        groups: [
+          jobsWithEvents.map(job => job.id + ': ' + job.name)
+        ]
+      },
+      bar: {
+        width: {
+          ratio: 0.9
+        }
+      },
+      axis: {
+        x: {
+          type: 'timeseries'
+        }
+      }
+    });
   };
 })
 

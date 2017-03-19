@@ -18,7 +18,14 @@ var timer = new Timer({
       .then(job => {
         logger.info('Processing ' + job.id + ' (' + job.name + ')');
         job.expired = true;
-        return Promise.all([job.save(), ExportService.process(job, job.notifications)]);
+        return Promise.all([
+          Event.create({
+            job: job,
+            user: job.user
+          }),
+          job.save(),
+          ExportService.process(job, job.notifications)
+        ]);
       });
     }
   }
