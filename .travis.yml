@@ -12,12 +12,13 @@ script:
 
 after_success:
   - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+    VERSION=`node -e "console.log(require('./package.json').version);"`;
     if [ "$TRAVIS_BRANCH" == "master" ]; then
-      VERSION=`node -e "console.log(require('./package.json').version);"`;
       docker tag theconnman/missd theconnman/missd:$VERSION;
       docker push theconnman/missd:latest;
       docker push theconnman/missd:$VERSION;
     elif [ "$TRAVIS_BRANCH" == "dev" ]; then
+      sed -i "s/$VERSION/$VERSION-dev/g" package.json
       docker tag theconnman/missd theconnman/missd:latest-dev;
       docker push theconnman/missd:latest-dev;
     fi
