@@ -2,7 +2,10 @@ module.exports = {
 
   find: function(req, res) {
     return Event.find({
-      user: req.session.passport.user
+      user: req.session.passport.user,
+      createdAt: {
+        '>=': new Date(Date.now() - 24 * 3600 * 1000)
+      }
     }).then(events => {
       res.ok(events);
     });
