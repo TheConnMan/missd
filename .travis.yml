@@ -18,7 +18,8 @@ after_success:
       docker push theconnman/missd:latest;
       docker push theconnman/missd:$VERSION;
     elif [ "$TRAVIS_BRANCH" == "dev" ]; then
-      sed -i "s/$VERSION/$VERSION-dev/g" package.json
+      sed -i "s/$VERSION/$VERSION-dev/g" package.json;
+      docker build -t theconnman/missd .;
       docker tag theconnman/missd theconnman/missd:latest-dev;
       docker push theconnman/missd:latest-dev;
     fi
