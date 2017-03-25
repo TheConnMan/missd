@@ -53,6 +53,8 @@ module.exports.bootstrap = function(cb) {
     }));
   }
 
+  ExportService.init();
+
   passport.serializeUser(function(user, done) {
     done(null, user.id);
   });

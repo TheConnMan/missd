@@ -10,11 +10,13 @@ var dateFormat = require('dateformat');
 var log4js = require('log4js');
 var logger = log4js.getLogger('api/services/ExportService');
 
-if (!emailClient) {
-  logger.warn('Email is not configured, email notifications will not be sent');
-}
-
 module.exports = {
+  init: function() {
+    if (!emailClient) {
+      logger.warn('Email is not configured, email notifications will not be sent');
+    }
+  },
+
   slack: function(job, notification) {
     if (notification.data.slackUrl) {
       var slack = new SlackWebhook(notification.data.slackUrl);
