@@ -6,6 +6,7 @@
     "bluebird": "^3.4.7",
     "dateformat": "^2.0.0",
     "ejs": "2.3.4",
+    "email-templates": "^2.5.4",
     "express-http-proxy": "^0.11.0",
     "fluent-logger": "github:theconnman/fluent-logger-node",
     "grunt": "1.0.1",

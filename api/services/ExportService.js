@@ -7,6 +7,10 @@ var emailClient = sails.config.globals.emailEnabled ? ses.createClient({
 
 var dateFormat = require('dateformat');
 
+var EmailTemplate = require('email-templates').EmailTemplate;
+
+var alertTemplate = new EmailTemplate('templates/alert');
+
 var log4js = require('log4js');
 var logger = log4js.getLogger('api/services/ExportService');
 
@@ -33,17 +37,30 @@ module.exports = {
   email: function(job, notification) {
     return new Promise((resolve, reject) => {
       if (emailClient) {
-        emailClient.sendEmail({
-          to: notification.data.email,
-          from: sails.config.globals.fromEmail,
-          subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
+        alertTemplate.render({
+          job,
+          url: sails.config.serverUrl,
+          action: job.expired ? 'Expired' : 'Reenabled',
+          type: job.expired ? 'bad' : 'good',
+          description: job.expired ? 'just expired' : 'been reenabled',
           message: getText(job, notification)
-        }, (err, data, res) => {
+        }, function(err, result) {
           if (err) {
-            logger.error(err);
             reject(err);
           } else {
-            resolve(data);
+            emailClient.sendEmail({
+              to: notification.data.email,
+              from: sails.config.globals.fromEmail,
+              subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
+              message: result.html
+            }, (err, data, res) => {
+              if (err) {
+                logger.error(err);
+                reject(err);
+              } else {
+                resolve(data);
+              }
+            });
           }
         });
       } else {
