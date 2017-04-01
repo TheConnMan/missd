@@ -21,7 +21,7 @@ module.exports = {
     }
   },
 
-  slack: function(job, notification) {
+  slack: function(job, notification, data) {
     if (notification.data.slackUrl) {
       var slack = new SlackWebhook(notification.data.slackUrl);
       return slack.send({
@@ -34,16 +34,12 @@ module.exports = {
     }
   },
 
-  email: function(job, notification) {
+  email: function(job, notification, data) {
     return new Promise((resolve, reject) => {
       if (emailClient) {
         alertTemplate.render({
           job,
-          url: sails.config.serverUrl,
-          action: job.expired ? 'Expired' : 'Reenabled',
-          type: job.expired ? 'bad' : 'good',
-          description: job.expired ? 'just expired' : 'been reenabled',
-          message: getText(job, notification)
+          data
         }, function(err, result) {
           if (err) {
             reject(err);
@@ -51,7 +47,7 @@ module.exports = {
             emailClient.sendEmail({
               to: notification.data.email,
               from: sails.config.globals.fromEmail,
-              subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
+              subject: data.subject,
               message: result.html
             }, (err, data, res) => {
               if (err) {
@@ -77,8 +73,16 @@ module.exports = {
   process: function(job, notifications) {
     return Promise.all(notifications.map(notification => {
       logger.debug('Exporting ' + (job.expired ? 'expire' : 'reenable') + ' ' + notification.exportType + ' notification ' + notification.id);
+      var data = {
+        color: job.expired ? '#4DBD33' : '#ff4444',
+        title: job.name + ' ' + (job.expired ? 'Expired' : 'Reenabled'),
+        url: sails.config.serverUrl,
+        subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
+        description: job.name + ' has ' + (job.expired ? 'just expired' : 'been reenabled'),
+        message: getText(job, notification)
+      };
       var fn = this[notification.exportType] || this.default;
-      return fn(job, notification);
+      return fn(job, notification, data);
     }));
   }
 };

@@ -3,7 +3,7 @@
 <head>
   <meta name="viewport" content="width=device-width" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Miss.d: <%= job.name %> <% action %></title>
+  <title>Miss.d: <%= data.title %></title>
 </head>
 
 <body>
@@ -14,8 +14,8 @@
 			<div class="content">
 				<table class="main" width="100%" cellpadding="0" cellspacing="0">
 					<tr>
-						<td class="alert alert-<%= type %>">
-							<%= job.name %> has <%= description %>
+						<td class="alert" style="background: <%= data.color %>">
+							<%= data.description %>
 						</td>
 					</tr>
 					<tr>
@@ -23,12 +23,12 @@
 							<table width="100%" cellpadding="0" cellspacing="0">
 								<tr>
 									<td class="content-block aligncenter">
-										<%= message %>
+										<%= data.message %>
 									</td>
 								</tr>
 								<tr>
 									<td class="content-block aligncenter">
-										<a href="<%= url %>" class="btn-primary">Go to Miss.d</a>
+										<a href="<%= data.url %>" class="btn-primary">Go to Miss.d</a>
 									</td>
 								</tr>
 							</table>
