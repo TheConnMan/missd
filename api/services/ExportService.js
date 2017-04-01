@@ -25,8 +25,16 @@ module.exports = {
     if (notification.data.slackUrl) {
       var slack = new SlackWebhook(notification.data.slackUrl);
       return slack.send({
-        text: getText(job, notification),
-        username: 'Miss.d'
+        username: 'Miss.d',
+        attachments: [{
+          color: data.color,
+          title: data.title,
+          title_link: data.url,
+          fields:[{
+            title: 'Last Active',
+            value: data.lastActive
+          }]
+        }]
       });
     } else {
       logger.error('Slack notification requires a URL: ' + notification.id);
@@ -74,12 +82,14 @@ module.exports = {
     return Promise.all(notifications.map(notification => {
       logger.debug('Exporting ' + (job.expired ? 'expire' : 'reenable') + ' ' + notification.exportType + ' notification ' + notification.id);
       var data = {
+        username: 'Miss.d',
         color: job.expired ? '#4DBD33' : '#ff4444',
         title: job.name + ' ' + (job.expired ? 'Expired' : 'Reenabled'),
         url: sails.config.serverUrl,
         subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
         description: job.name + ' has ' + (job.expired ? 'just expired' : 'been reenabled'),
-        message: getText(job, notification)
+        message: getText(job, notification),
+        lastActive: job.lastActive ? dateFormat(job.lastActive, 'mm/dd/yyyy HH:MM Z') : 'Never'
       };
       var fn = this[notification.exportType] || this.default;
       return fn(job, notification, data);
