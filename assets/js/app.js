@@ -96,7 +96,7 @@ angular
     return serverUrl + '/ingest/' + key;
   };
 
-  var hours = Array.apply(null, Array(24)).map((val, i) => {
+  var hours = Array.apply(null, Array(7 * 24)).map((val, i) => {
     return moment().startOf('hour').subtract({
       hours: i
     }).toDate();
@@ -135,7 +135,10 @@ angular
       },
       axis: {
         x: {
-          type: 'timeseries'
+          type: 'timeseries',
+          tick: {
+            format: '%m/%d %H:%M'
+          }
         }
       }
     });
