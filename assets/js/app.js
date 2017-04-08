@@ -270,6 +270,62 @@ angular
 
 .controller('EventController', function($scope) {
 
+  $scope.eventTypes = [{
+    label: 'Alarm',
+    alarm: true
+  }, {
+    label: 'Check',
+    alarm: false
+  }];
+
+  $scope.filters = [];
+
+  $scope.filteredEvents = function() {
+    return $scope.events.filter($scope.eventFilter);
+  };
+
+  $scope.addFilter = function(field, value) {
+    $scope.filters.push({ field, value });
+  };
+
+  $scope.removeFilter = function(field, value) {
+    $scope.filters.splice($scope.filters.indexOf({ field, value }), 1);
+  };
+
+  $scope.eventFilter = function(event) {
+    var mapFilters = $scope.filters.reduce((map, filter) => {
+      if (!map[filter.field]) {
+        map[filter.field] = [];
+      }
+      map[filter.field].push(filter.value);
+      return map;
+    }, {});
+    return Object.keys(mapFilters).reduce((matches, key) => {
+      return matches && !mapFilters[key].reduce((valueMatches, value) => {
+        return valueMatches || event[key] !== value;
+      }, false);
+    }, true);
+  };
+
+  $scope.uniqueJobs = function() {
+    return $scope.jobs.filter(job => {
+      return $scope.filteredEvents().filter(event => event.job === job.id).length !== 0;
+    });
+  };
+
+  $scope.jobEventCount = function(job) {
+    return $scope.filteredEvents().filter(event => event.job === job.id).length;
+  };
+
+  $scope.uniqueEventTypes = function() {
+    return $scope.eventTypes.filter(type => {
+      return $scope.filteredEvents().filter(event => event.alarm === type.alarm).length !== 0;
+    });
+  };
+
+  $scope.eventTypeCount = function(eventType) {
+    return $scope.filteredEvents().filter(event => event.alarm === eventType.alarm).length;
+  };
 })
 
 .config(function($routeProvider, $locationProvider) {
