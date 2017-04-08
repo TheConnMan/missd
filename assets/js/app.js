@@ -76,6 +76,10 @@ angular
     $location.path('/help');
   };
 
+  $scope.eventTable = function() {
+    $location.path('/events');
+  };
+
   $scope.jobChecks = function(job) {
     return $scope.events.filter(event => event.job === job.id && !event.alarm);
   };
@@ -88,8 +92,21 @@ angular
     return new Date(date).getTime();
   };
 
+  $scope.getJob = function(id) {
+    var jobs = $scope.jobs.filter(job => job.id === id);
+    return jobs.length === 1 ? jobs[0] : null;
+  };
+
   $scope.formatDuration = function(duration) {
     return moment.duration(duration).format('d [days], h [hrs], m [min], s [sec]');
+  };
+
+  $scope.formatDate = function(date) {
+    return moment(date).format('MM/DD/YYYY HH:mm:ss');
+  };
+
+  $scope.relativeDate = function(date) {
+    return moment(date).fromNow();
   };
 
   $scope.ingestUrl = function(key) {
@@ -251,10 +268,18 @@ angular
 
 })
 
+.controller('EventController', function($scope) {
+
+})
+
 .config(function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/', {
       templateUrl : "/templates/index.html"
+  })
+ .when('/events', {
+    templateUrl: '/templates/events.html',
+    controller: 'EventController'
   })
  .when('/job/:jobId', {
     templateUrl: '/templates/job.html',
