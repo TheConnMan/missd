@@ -22,7 +22,7 @@
         <i class="mail icon"></i>
         {{job.notifications.length || 0}} Notification{{job.notifications.length == 1 ? '' : 's'}}
         <i class="alarm icon"></i>
-        {{jobEvents(job).length}} Event{{jobEvents(job).length == 1 ? '' : 's'}}
+        {{jobAlarms(job).length}} Alarm{{jobAlarms(job).length == 1 ? '' : 's'}}
       </div>
       <h4 class="ui sub header">
         API Key

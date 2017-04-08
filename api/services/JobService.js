@@ -21,7 +21,8 @@ var timer = new Timer({
         return Promise.all([
           Event.create({
             job: job,
-            user: job.user
+            user: job.user,
+            alarm: true
           }),
           job.save(),
           ExportService.process(job, job.notifications)

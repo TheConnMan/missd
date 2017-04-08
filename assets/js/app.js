@@ -76,8 +76,8 @@ angular
     $location.path('/help');
   };
 
-  $scope.jobEvents = function(job) {
-    return $scope.events.filter(event => event.job === job.id);
+  $scope.jobAlarms = function(job) {
+    return $scope.events.filter(event => event.job === job.id && event.alarm);
   };
 
   $scope.getTime = function(date) {
@@ -100,11 +100,11 @@ angular
 
   $scope.refreshDatapoints = function() {
     var jobsWithEvents = $scope.jobs.filter(job => {
-      return $scope.events.filter(event => event.job === job.id).length;
+      return $scope.events.filter(event => event.job === job.id && event.alarm).length;
     });
     var columns = jobsWithEvents.map(job => {
       var data = hours.map(date => {
-        return $scope.events.filter(event => event.job === job.id && moment(event.createdAt).startOf('hour').toDate().getTime() === date.getTime()).length;
+        return $scope.events.filter(event => event.job === job.id && event.alarm && moment(event.createdAt).startOf('hour').toDate().getTime() === date.getTime()).length;
       }, {});
       data.unshift(job.id + ': ' + job.name);
       return data;
