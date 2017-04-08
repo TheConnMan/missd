@@ -47,7 +47,8 @@
             {{ getJob(event.job).name }}
             <i class="edit link icon" style="float: right;" ng-click="edit(getJob(event.job))"></i>
           </td>
-          <td>
+          <td class="center aligned">
+            <i class="{{ event.alarm ? 'alarm' : 'check' }} icon"></i>
             {{ event.alarm ? 'Alarm' : 'Check' }}
           </td>
         </tr>
