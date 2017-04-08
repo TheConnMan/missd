@@ -21,8 +21,11 @@
       <div class="meta">
         <i class="mail icon"></i>
         {{job.notifications.length || 0}} Notification{{job.notifications.length == 1 ? '' : 's'}}
+        <br />
         <i class="alarm icon"></i>
         {{jobAlarms(job).length}} Alarm{{jobAlarms(job).length == 1 ? '' : 's'}}
+        <i class="check icon"></i>
+        {{jobChecks(job).length}} Check{{jobChecks(job).length == 1 ? '' : 's'}}
       </div>
       <h4 class="ui sub header">
         API Key

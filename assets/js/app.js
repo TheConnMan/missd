@@ -76,6 +76,10 @@ angular
     $location.path('/help');
   };
 
+  $scope.jobChecks = function(job) {
+    return $scope.events.filter(event => event.job === job.id && !event.alarm);
+  };
+
   $scope.jobAlarms = function(job) {
     return $scope.events.filter(event => event.job === job.id && event.alarm);
   };

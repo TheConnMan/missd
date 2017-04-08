@@ -39,7 +39,11 @@ module.exports = {
       this.clear(job.id);
       this.kickoff(job);
       job.lastActive = new Date();
-      var promises = [];
+      var promises = [Event.create({
+        job: job,
+        user: job.user,
+        alarm: false
+      })];
       if (job.expired) {
         job.expired = false;
         promises.push(ExportService.process(job, job.notifications));
