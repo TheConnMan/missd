@@ -1,4 +1,6 @@
-var sailsLogger = require('sails-persistence-logger')();
+var sailsLogger = require('sails-persistence-logger')({
+  level: 'debug'
+});
 
 module.exports.models = {
   connection: process.env.MYSQL_HOST ? 'mysql' : 'localDiskDb',

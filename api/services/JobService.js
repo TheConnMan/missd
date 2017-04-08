@@ -21,7 +21,8 @@ var timer = new Timer({
         return Promise.all([
           Event.create({
             job: job,
-            user: job.user
+            user: job.user,
+            alarm: true
           }),
           job.save(),
           ExportService.process(job, job.notifications)
@@ -38,7 +39,11 @@ module.exports = {
       this.clear(job.id);
       this.kickoff(job);
       job.lastActive = new Date();
-      var promises = [];
+      var promises = [Event.create({
+        job: job,
+        user: job.user,
+        alarm: false
+      })];
       if (job.expired) {
         job.expired = false;
         promises.push(ExportService.process(job, job.notifications));
