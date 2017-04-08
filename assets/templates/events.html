@@ -1,19 +1,20 @@
 <h1 class="ui dividing header">Events</h1>
-<div class="ui labels">
-  <a class="ui label" ng-repeat="filter in filters" ng-click="removeFilter(filter.field, filter.value)">
-    <i class="remove icon"></i>
-    {{ filter.field + ': ' + filter.value }}
-  </a>
-</div>
 <div class="ui grid">
-  <div class="four wide column">
+  <div class="six wide column">
     <div class="ui segment">
       <h2 class="ui dividing header">Filters</h2>
+      <div class="ui labels">
+        <a class="ui {{ filter.added ? 'green' : 'red' }} label" ng-repeat="filter in filters" ng-click="removeFilter(filter.field, filter.value, filter.added)">
+          <i class="remove icon"></i>
+          {{ filter.field + ': ' + filter.value }}
+        </a>
+      </div>
       <h3 class="ui header">Event Type</h3>
       <div class="ui divided list">
         <div class=" item" ng-repeat="type in uniqueEventTypes() | orderBy: label">
           <div class="ui large horizontal label">
-            <i class="plus link icon" ng-click="addFilter('alarm', type.alarm)"></i>
+            <i class="plus link icon" ng-click="addFilter('alarm', type.alarm, true)"></i>
+            <i class="minus link icon" ng-click="addFilter('alarm', type.alarm, false)"></i>
             {{ type.label }} ({{ eventTypeCount(type) }})
           </div>
         </div>
@@ -22,14 +23,15 @@
       <div class="ui divided list">
         <div class=" item" ng-repeat="job in uniqueJobs() | orderBy: name track by job.id">
           <div class="ui large horizontal label">
-            <i class="plus link icon" ng-click="addFilter('job', job.id)"></i>
+            <i class="plus link icon" ng-click="addFilter('job', job.id, true)"></i>
+            <i class="minus link icon" ng-click="addFilter('job', job.id, false)"></i>
             {{ job.name }} ({{ jobEventCount(job) }})
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="twelve wide column">
+  <div class="ten wide column">
     <table class="ui compact celled table">
       <thead>
         <tr>

@@ -284,12 +284,12 @@ angular
     return $scope.events.filter($scope.eventFilter);
   };
 
-  $scope.addFilter = function(field, value) {
-    $scope.filters.push({ field, value });
+  $scope.addFilter = function(field, value, added) {
+    $scope.filters.push({ field, value, added });
   };
 
-  $scope.removeFilter = function(field, value) {
-    $scope.filters.splice($scope.filters.indexOf({ field, value }), 1);
+  $scope.removeFilter = function(field, value, added) {
+    $scope.filters.splice($scope.filters.indexOf({ field, value, added }), 1);
   };
 
   $scope.eventFilter = function(event) {
@@ -297,12 +297,15 @@ angular
       if (!map[filter.field]) {
         map[filter.field] = [];
       }
-      map[filter.field].push(filter.value);
+      map[filter.field].push({
+        value: filter.value,
+        added: filter.added
+      });
       return map;
     }, {});
     return Object.keys(mapFilters).reduce((matches, key) => {
-      return matches && !mapFilters[key].reduce((valueMatches, value) => {
-        return valueMatches || event[key] !== value;
+      return matches && !mapFilters[key].reduce((selectionMatches, selection) => {
+        return selectionMatches || (event[key] !== selection.value && selection.added) || (event[key] === selection.value && !selection.added);
       }, false);
     }, true);
   };
