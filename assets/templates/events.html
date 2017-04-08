@@ -4,17 +4,17 @@
     <div class="ui segment">
       <h2 class="ui dividing header">Filters</h2>
       <div class="ui labels">
-        <a class="ui {{ filter.added ? 'green' : 'red' }} label" ng-repeat="filter in filters" ng-click="removeFilter(filter.field, filter.value, filter.added)">
+        <a class="ui icon {{ filter.added ? 'green' : 'red' }} label" ng-repeat="filter in filters" ng-click="removeFilter(filter.field, filter.value, filter.added)">
           <i class="remove icon"></i>
-          {{ filter.field + ': ' + filter.value }}
+          {{ filter.label }}
         </a>
       </div>
       <h3 class="ui header">Event Type</h3>
       <div class="ui divided list">
         <div class=" item" ng-repeat="type in uniqueEventTypes() | orderBy: label">
+          <i class="inline plus link icon" ng-click="addFilter('alarm', type.alarm, 'Type: ' + (type.alarm ? 'Alarm' : 'Check'), true)"></i>
+          <i class="inline minus link icon" ng-click="addFilter('alarm', type.alarm, 'Type: ' + (type.alarm ? 'Alarm' : 'Check'), false)"></i>
           <div class="ui large horizontal label">
-            <i class="plus link icon" ng-click="addFilter('alarm', type.alarm, true)"></i>
-            <i class="minus link icon" ng-click="addFilter('alarm', type.alarm, false)"></i>
             {{ type.label }} ({{ eventTypeCount(type) }})
           </div>
         </div>
@@ -22,9 +22,9 @@
       <h3 class="ui header">Jobs</h3>
       <div class="ui divided list">
         <div class=" item" ng-repeat="job in uniqueJobs() | orderBy: name track by job.id">
+          <i class="inline plus link icon" ng-click="addFilter('job', job.id, 'Job: ' + job.name, true)"></i>
+          <i class="inline minus link icon" ng-click="addFilter('job', job.id, 'Job: ' + job.name, false)"></i>
           <div class="ui large horizontal label">
-            <i class="plus link icon" ng-click="addFilter('job', job.id, true)"></i>
-            <i class="minus link icon" ng-click="addFilter('job', job.id, false)"></i>
             {{ job.name }} ({{ jobEventCount(job) }})
           </div>
         </div>

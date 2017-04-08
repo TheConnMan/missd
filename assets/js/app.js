@@ -284,8 +284,8 @@ angular
     return $scope.events.filter($scope.eventFilter);
   };
 
-  $scope.addFilter = function(field, value, added) {
-    $scope.filters.push({ field, value, added });
+  $scope.addFilter = function(field, value, label, added) {
+    $scope.filters.push({ field, value, label, added });
   };
 
   $scope.removeFilter = function(field, value, added) {
