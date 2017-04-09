@@ -5,7 +5,7 @@
     Add Job
   </div>
 </h1>
-<div id="chart" ng-show="{{events.length !== 0}}"></div>
+<div id="chart" ng-show="{{ jobAlarms().length !== 0 }}"></div>
 <div ng-if="jobs.length != 0" class="ui four doubling cards">
   <div class="card" ng-repeat="job in jobs | orderBy: 'name' track by job.id">
     <div ng-if="!job.expired" class="ui green right corner label">
