@@ -83,7 +83,7 @@ module.exports = {
       logger.debug('Exporting ' + (job.expired ? 'expire' : 'reenable') + ' ' + notification.exportType + ' notification ' + notification.id);
       var data = {
         username: 'Miss.d',
-        color: job.expired ? '#4DBD33' : '#ff4444',
+        color: job.expired ? '#ff4444' : '#4DBD33',
         title: job.name + ' ' + (job.expired ? 'Expired' : 'Reenabled'),
         url: sails.config.serverUrl,
         subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
