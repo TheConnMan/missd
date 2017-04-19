@@ -41,6 +41,7 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
+    "migrate": "grunt db:migrate:up",
     "dev": "nodemon app.js"
   },
   "main": "app.js",
