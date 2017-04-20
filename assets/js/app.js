@@ -38,7 +38,7 @@ angular
     });
   });
 
-  $scope.events = Event.query(() => {
+  $scope.events = Event.query(function() {
     $scope.dataLoaded++;
   });
 
@@ -49,7 +49,7 @@ angular
     }
   });
 
-  $scope.$watch('dataLoaded', () => {
+  $scope.$watch('dataLoaded', function() {
     if ($scope.dataLoaded === 3) {
       $scope.refreshDatapoints();
     }
@@ -81,11 +81,15 @@ angular
   };
 
   $scope.jobChecks = function(job) {
-    return $scope.events.filter(event => event.job === job.id && !event.alarm);
+    return $scope.events.filter(function(event) {
+      return event.job === job.id && !event.alarm;
+    });
   };
 
   $scope.jobAlarms = function(job) {
-    return $scope.events.filter(event => event.job === job.id && event.alarm);
+    return $scope.events.filter(function(event) {
+      return event.job === job.id && event.alarm;
+    });
   };
 
   $scope.getTime = function(date) {
@@ -93,7 +97,9 @@ angular
   };
 
   $scope.getJob = function(id) {
-    var jobs = $scope.jobs.filter(job => job.id === id);
+    var jobs = $scope.jobs.filter(function(job) {
+      return job.id === id;
+    });
     return jobs.length === 1 ? jobs[0] : null;
   };
 
@@ -113,19 +119,23 @@ angular
     return serverUrl + '/ingest/' + key;
   };
 
-  var hours = Array.apply(null, Array(7 * 24)).map((val, i) => {
+  var hours = Array.apply(null, Array(7 * 24)).map(function(val, i) {
     return moment().startOf('hour').subtract({
       hours: i
     }).toDate();
   });
 
   $scope.refreshDatapoints = function() {
-    var jobsWithEvents = $scope.jobs.filter(job => {
-      return $scope.events.filter(event => event.job === job.id && event.alarm).length;
+    var jobsWithEvents = $scope.jobs.filter(function(job) {
+      return $scope.events.filter(function(event) {
+        return event.job === job.id && event.alarm;
+      }).length;
     });
-    var columns = jobsWithEvents.map(job => {
-      var data = hours.map(date => {
-        return $scope.events.filter(event => event.job === job.id && event.alarm && moment(event.createdAt).startOf('hour').toDate().getTime() === date.getTime()).length;
+    var columns = jobsWithEvents.map(function(job) {
+      var data = hours.map(function(date) {
+        return $scope.events.filter(function(event) {
+          return event.job === job.id && event.alarm && moment(event.createdAt).startOf('hour').toDate().getTime() === date.getTime();
+        }).length;
       }, {});
       data.unshift(job.id + ': ' + job.name);
       return data;
@@ -142,7 +152,9 @@ angular
           ['dates'].concat(hours)
         ].concat(columns),
         groups: [
-          jobsWithEvents.map(job => job.id + ': ' + job.name)
+          jobsWithEvents.map(function(job) {
+            return job.id + ': ' + job.name;
+          })
         ]
       },
       bar: {
@@ -285,15 +297,24 @@ angular
   };
 
   $scope.addFilter = function(field, value, label, added) {
-    $scope.filters.push({ field, value, label, added });
+    $scope.filters.push({
+      field: field,
+      value: value,
+      label: label,
+      added: added
+    });
   };
 
   $scope.removeFilter = function(field, value, added) {
-    $scope.filters.splice($scope.filters.indexOf({ field, value, added }), 1);
+    $scope.filters.splice($scope.filters.indexOf({
+      field: field,
+      value: value,
+      added: added
+    }), 1);
   };
 
   $scope.eventFilter = function(event) {
-    var mapFilters = $scope.filters.reduce((map, filter) => {
+    var mapFilters = $scope.filters.reduce(function(map, filter) {
       if (!map[filter.field]) {
         map[filter.field] = [];
       }
@@ -303,31 +324,39 @@ angular
       });
       return map;
     }, {});
-    return Object.keys(mapFilters).reduce((matches, key) => {
-      return matches && !mapFilters[key].reduce((selectionMatches, selection) => {
+    return Object.keys(mapFilters).reduce(function(matches, key) {
+      return matches && !mapFilters[key].reduce(function(selectionMatches, selection) {
         return selectionMatches || (event[key] !== selection.value && selection.added) || (event[key] === selection.value && !selection.added);
       }, false);
     }, true);
   };
 
   $scope.uniqueJobs = function() {
-    return $scope.jobs.filter(job => {
-      return $scope.filteredEvents().filter(event => event.job === job.id).length !== 0;
+    return $scope.jobs.filter(function(job) {
+      return $scope.filteredEvents().filter(function(event) {
+        return event.job === job.id;
+      }).length !== 0;
     });
   };
 
   $scope.jobEventCount = function(job) {
-    return $scope.filteredEvents().filter(event => event.job === job.id).length;
+    return $scope.filteredEvents().filter(function(event) {
+      return event.job === job.id;
+    }).length;
   };
 
   $scope.uniqueEventTypes = function() {
-    return $scope.eventTypes.filter(type => {
-      return $scope.filteredEvents().filter(event => event.alarm === type.alarm).length !== 0;
+    return $scope.eventTypes.filter(function(type) {
+      return $scope.filteredEvents().filter(function(event) {
+        return event.alarm === type.alarm;
+      }).length !== 0;
     });
   };
 
   $scope.eventTypeCount = function(eventType) {
-    return $scope.filteredEvents().filter(event => event.alarm === eventType.alarm).length;
+    return $scope.filteredEvents().filter(function(event) {
+      return event.alarm === eventType.alarm;
+    }).length;
   };
 }])
 
