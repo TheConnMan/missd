@@ -11,4 +11,4 @@ COPY . /usr/src/app
 
 EXPOSE 1337
 
-CMD if [[ -z "${MYSQL_HOST}" ]]; then npm start; else npm run migrate && npm start; fi
+CMD if [[ -z "${MYSQL_HOST}" ]]; then npm start; else npm run migrate && node app --prod; fi
