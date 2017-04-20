@@ -1,7 +1,7 @@
 angular
 .module('app', ['ngResource', 'angularMoment', 'ngRoute', 'angular-clipboard'])
 
-.controller('MainController', function($scope, $http, $resource, $route, $routeParams, $location, $timeout) {
+.controller('MainController', ['$scope', '$http', '$resource', '$route', '$routeParams', '$location', '$timeout', function($scope, $http, $resource, $route, $routeParams, $location, $timeout) {
 
   localStorage.login = true;
 
@@ -160,9 +160,9 @@ angular
       }
     });
   };
-})
+}])
 
-.controller('JobController', function($scope, $routeParams, $resource, $location, $timeout) {
+.controller('JobController', ['$scope', '$routeParams', '$resource', '$location', '$timeout', function($scope, $routeParams, $resource, $location, $timeout) {
   $scope.params = $routeParams;
 
   $scope.new = $scope.params.jobId === 'new';
@@ -262,13 +262,13 @@ angular
       return notification.id;
     }));
   };
+}])
+
+.controller('HelpController', function() {
+
 })
 
-.controller('HelpController', function($scope) {
-
-})
-
-.controller('EventController', function($scope) {
+.controller('EventController', ['$scope', function($scope) {
 
   $scope.eventTypes = [{
     label: 'Alarm',
@@ -329,9 +329,9 @@ angular
   $scope.eventTypeCount = function(eventType) {
     return $scope.filteredEvents().filter(event => event.alarm === eventType.alarm).length;
   };
-})
+}])
 
-.config(function($routeProvider, $locationProvider) {
+.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/', {
       templateUrl : "/templates/index.html"
@@ -352,4 +352,4 @@ angular
     templateUrl: '/templates/help.html',
     controller: 'HelpController'
   });
-});
+}]);
