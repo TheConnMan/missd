@@ -5,6 +5,8 @@
   "dependencies": {
     "bluebird": "^3.4.7",
     "dateformat": "^2.0.0",
+    "db-migrate": "^0.10.0-beta.20",
+    "db-migrate-mysql": "^1.1.10",
     "ejs": "2.3.4",
     "email-templates": "^2.5.4",
     "express-http-proxy": "^0.11.0",
@@ -30,6 +32,7 @@
     "passport-github2": "^0.1.10",
     "rc": "1.0.1",
     "sails": "~0.12.7",
+    "sails-db-migrate": "^1.5.0",
     "sails-disk": "~0.10.9",
     "sails-mysql": "^0.11.5",
     "sails-persistence-logger": "^0.1.0",
@@ -38,6 +41,7 @@
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
+    "migrate": "grunt db:migrate:up",
     "dev": "nodemon app.js"
   },
   "main": "app.js",
