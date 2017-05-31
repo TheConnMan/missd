@@ -80,6 +80,12 @@ angular
     $location.path('/events');
   };
 
+  $scope.getAlarms = function() {
+    return $scope.events.filter(function(event) {
+      return event.alarm;
+    });
+  };
+
   $scope.jobClears = function(job) {
     return $scope.events.filter(function(event) {
       return event.job === job.id && !event.alarm;
