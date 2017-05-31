@@ -38,6 +38,7 @@
           <th>Event Date</th>
           <th>Relative Date</th>
           <th>Job</th>
+          <th>Period</th>
           <th>Type</th>
         </tr>
       </thead>
@@ -48,6 +49,9 @@
           <td>
             {{ getJob(event.job).name }}
             <i class="edit link icon" style="float: right;" ng-click="edit(getJob(event.job))"></i>
+          </td>
+          <td>
+            {{ formatDuration(getJob(event.job).timeout * 1000) }}
           </td>
           <td class="center aligned">
             <i class="{{ event.alarm ? 'alarm' : 'check' }} icon"></i>
