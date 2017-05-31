@@ -80,7 +80,7 @@ angular
     $location.path('/events');
   };
 
-  $scope.jobChecks = function(job) {
+  $scope.jobClears = function(job) {
     return $scope.events.filter(function(event) {
       return event.job === job.id && !event.alarm;
     });
@@ -286,7 +286,7 @@ angular
     label: 'Alarm',
     alarm: true
   }, {
-    label: 'Check',
+    label: 'Clear',
     alarm: false
   }];
 

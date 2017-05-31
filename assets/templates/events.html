@@ -12,8 +12,8 @@
       <h3 class="ui header">Event Type</h3>
       <div class="ui divided list">
         <div class=" item" ng-repeat="type in uniqueEventTypes() | orderBy: label">
-          <i class="inline plus link icon" ng-click="addFilter('alarm', type.alarm, 'Type: ' + (type.alarm ? 'Alarm' : 'Check'), true)"></i>
-          <i class="inline minus link icon" ng-click="addFilter('alarm', type.alarm, 'Type: ' + (type.alarm ? 'Alarm' : 'Check'), false)"></i>
+          <i class="inline plus link icon" ng-click="addFilter('alarm', type.alarm, 'Type: ' + (type.alarm ? 'Alarm' : 'Clear'), true)"></i>
+          <i class="inline minus link icon" ng-click="addFilter('alarm', type.alarm, 'Type: ' + (type.alarm ? 'Alarm' : 'Clear'), false)"></i>
           <div class="ui large horizontal label">
             {{ type.label }} ({{ eventTypeCount(type) }})
           </div>
@@ -51,7 +51,7 @@
           </td>
           <td class="center aligned">
             <i class="{{ event.alarm ? 'alarm' : 'check' }} icon"></i>
-            {{ event.alarm ? 'Alarm' : 'Check' }}
+            {{ event.alarm ? 'Alarm' : 'Clear' }}
           </td>
         </tr>
       </tbody>
