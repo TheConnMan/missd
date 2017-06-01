@@ -31,6 +31,7 @@ module.exports = {
     var body = req.body || {};
     return Job.create({
       name: body.name,
+      description: body.description,
       timeout: body.timeout,
       user: req.session.passport.user,
       key: uuid.v4()
@@ -53,6 +54,7 @@ module.exports = {
       if (job) {
         var notifications = job.notifications;
         job.name = body.name;
+        job.description = body.description;
         job.timeout = body.timeout;
         return job.save().then(() => {
           job.notifications = notifications;

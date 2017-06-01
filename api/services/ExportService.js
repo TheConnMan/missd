@@ -29,6 +29,7 @@ module.exports = {
         attachments: [{
           color: data.color,
           title: data.title,
+          text: data.description,
           title_link: data.url,
           fields:[{
             title: 'Last Active',
@@ -87,7 +88,8 @@ module.exports = {
         title: job.name + ' ' + (job.expired ? 'Expired' : 'Reenabled'),
         url: sails.config.serverUrl,
         subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
-        description: job.name + ' has ' + (job.expired ? 'just expired' : 'been reenabled'),
+        description: job.description,
+        summary: job.name + ' has ' + (job.expired ? 'just expired' : 'been reenabled'),
         message: getText(job, notification),
         lastActive: job.lastActive ? dateFormat(job.lastActive, 'mm/dd/yyyy HH:MM Z') : 'Never'
       };

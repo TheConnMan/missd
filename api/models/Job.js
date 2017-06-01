@@ -6,6 +6,9 @@ module.exports = {
       minLength: 4,
       required: true
     },
+    description: {
+      type: 'text',
+    },
     timeout: {
       type: 'Integer',
       min: 10,
