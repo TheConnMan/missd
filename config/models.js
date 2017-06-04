@@ -1,5 +1,10 @@
-var sailsLogger = require('sails-persistence-logger')({
-  level: 'debug'
+var SailsPersistenceLogger = require('sails-persistence-logger');
+
+var sailsLogger = new SailsPersistenceLogger({
+  level: 'debug',
+  exclude: {
+    job: ['UPDATE']
+  }
 });
 
 module.exports.models = {
@@ -7,7 +12,19 @@ module.exports.models = {
 
   migrate: process.env.MYSQL_HOST ? 'safe' : 'alter',
 
-  afterCreate: sailsLogger.afterCreate,
-  afterUpdate: sailsLogger.afterUpdate,
-  afterDestroy: sailsLogger.afterDestroy
+  afterCreate: function(record, cb) {
+    sailsLogger.afterCreate(record, this).then(data => {
+      cb();
+    });
+  },
+  afterUpdate: function(record, cb) {
+    sailsLogger.afterUpdate(record, this).then(data => {
+      cb();
+    });
+  },
+  afterDestroy: function(record, cb) {
+    sailsLogger.afterDestroy(record, this).then(data => {
+      cb();
+    });
+  }
 };
