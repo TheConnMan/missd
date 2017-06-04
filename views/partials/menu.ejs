@@ -25,9 +25,9 @@
         Log In
       </a>
     <% } %>
-    <div class="item">
-      v<%= sails.config.globals.version %>
-    </div>
+    <a class="ui item" href="<%= sails.config.globals.versionLink %>" target="_blank">
+      Miss.d v<%= sails.config.globals.version %>
+    </a>
     <% if (user) { %>
       <a onclick="logout()" href="#" class="item">
         Logout
