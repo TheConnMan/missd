@@ -1,7 +1,7 @@
 angular
 .module('app', ['ngResource', 'angularMoment', 'ngRoute', 'angular-clipboard'])
 
-.controller('MainController', function($scope, $http, $resource, $route, $routeParams, $location, $timeout) {
+.controller('MainController', ['$scope', '$http', '$resource', '$route', '$routeParams', '$location', '$timeout', function($scope, $http, $resource, $route, $routeParams, $location, $timeout) {
 
   localStorage.login = true;
 
@@ -9,8 +9,14 @@ angular
   $scope.$location = $location;
   $scope.$routeParams = $routeParams;
 
+  $scope.dataLoaded = 0;
+
   var Job = $resource('/jobs/:jobId', {
     jobId: '@id'
+  });
+
+  var Event = $resource('/events/:eventId', {
+    eventId: '@id'
   });
 
   var Notification = $resource('/notifications/:notificationId', {
@@ -18,6 +24,7 @@ angular
   });
 
   $scope.jobs = Job.query(function() {
+    $scope.dataLoaded++;
     $scope.jobs.forEach(function(job) {
       job.notifications = job.notifications ? job.notifications.map(function(notification) {
         return new Notification(notification);
@@ -29,6 +36,23 @@ angular
         on: 'click'
       });
     });
+  });
+
+  $scope.events = Event.query(function() {
+    $scope.dataLoaded++;
+  });
+
+  $scope.$on('$viewContentLoaded', function() {
+    $scope.dataLoaded++;
+    if ($scope.dataLoaded > 3) {
+      $scope.refreshDatapoints();
+    }
+  });
+
+  $scope.$watch('dataLoaded', function() {
+    if ($scope.dataLoaded === 3) {
+      $scope.refreshDatapoints();
+    }
   });
 
   $scope.delete = function(job) {
@@ -52,20 +76,111 @@ angular
     $location.path('/help');
   };
 
+  $scope.eventTable = function() {
+    $location.path('/events');
+  };
+
+  $scope.getAlarms = function() {
+    return $scope.events.filter(function(event) {
+      return event.alarm;
+    });
+  };
+
+  $scope.jobClears = function(job) {
+    return $scope.events.filter(function(event) {
+      return event.job === job.id && !event.alarm;
+    });
+  };
+
+  $scope.jobAlarms = function(job) {
+    return $scope.events.filter(function(event) {
+      return event.job === job.id && event.alarm;
+    });
+  };
+
   $scope.getTime = function(date) {
     return new Date(date).getTime();
+  };
+
+  $scope.getJob = function(id) {
+    var jobs = $scope.jobs.filter(function(job) {
+      return job.id === id;
+    });
+    return jobs.length === 1 ? jobs[0] : null;
   };
 
   $scope.formatDuration = function(duration) {
     return moment.duration(duration).format('d [days], h [hrs], m [min], s [sec]');
   };
 
+  $scope.formatDate = function(date) {
+    return moment(date).format('MM/DD/YYYY HH:mm:ss');
+  };
+
+  $scope.relativeDate = function(date) {
+    return moment(date).fromNow();
+  };
+
   $scope.ingestUrl = function(key) {
     return serverUrl + '/ingest/' + key;
   };
-})
 
-.controller('JobController', function($scope, $routeParams, $resource, $location, $timeout) {
+  var hours = Array.apply(null, Array(7 * 24)).map(function(val, i) {
+    return moment().startOf('hour').subtract({
+      hours: i
+    }).toDate();
+  });
+
+  $scope.refreshDatapoints = function() {
+    var jobsWithEvents = $scope.jobs.filter(function(job) {
+      return $scope.events.filter(function(event) {
+        return event.job === job.id && event.alarm;
+      }).length;
+    });
+    var columns = jobsWithEvents.map(function(job) {
+      var data = hours.map(function(date) {
+        return $scope.events.filter(function(event) {
+          return event.job === job.id && event.alarm && moment(event.createdAt).startOf('hour').toDate().getTime() === date.getTime();
+        }).length;
+      }, {});
+      data.unshift(job.id + ': ' + job.name);
+      return data;
+    });
+    c3.generate({
+      bindto: '#chart',
+      size: {
+        height: 200
+      },
+      data: {
+        x: 'dates',
+        type: 'bar',
+        columns: [
+          ['dates'].concat(hours)
+        ].concat(columns),
+        groups: [
+          jobsWithEvents.map(function(job) {
+            return job.id + ': ' + job.name;
+          })
+        ]
+      },
+      bar: {
+        width: {
+          ratio: 0.9
+        }
+      },
+      axis: {
+        x: {
+          type: 'timeseries',
+          tick: {
+            format: '%m/%d %H:%M'
+          }
+        }
+      }
+    });
+  };
+}])
+
+.controller('JobController', ['$scope', '$routeParams', '$resource', '$location', '$timeout', function($scope, $routeParams, $resource, $location, $timeout) {
   $scope.params = $routeParams;
 
   $scope.new = $scope.params.jobId === 'new';
@@ -165,16 +280,100 @@ angular
       return notification.id;
     }));
   };
+}])
+
+.controller('HelpController', function() {
+
 })
 
-.controller('HelpController', function($scope) {
+.controller('EventController', ['$scope', function($scope) {
 
-})
+  $scope.eventTypes = [{
+    label: 'Alarm',
+    alarm: true
+  }, {
+    label: 'Clear',
+    alarm: false
+  }];
 
-.config(function($routeProvider, $locationProvider) {
+  $scope.filters = [];
+
+  $scope.filteredEvents = function() {
+    return $scope.events.filter($scope.eventFilter);
+  };
+
+  $scope.addFilter = function(field, value, label, added) {
+    $scope.filters.push({
+      field: field,
+      value: value,
+      label: label,
+      added: added
+    });
+  };
+
+  $scope.removeFilter = function(field, value, added) {
+    $scope.filters.splice($scope.filters.indexOf({
+      field: field,
+      value: value,
+      added: added
+    }), 1);
+  };
+
+  $scope.eventFilter = function(event) {
+    var mapFilters = $scope.filters.reduce(function(map, filter) {
+      if (!map[filter.field]) {
+        map[filter.field] = [];
+      }
+      map[filter.field].push({
+        value: filter.value,
+        added: filter.added
+      });
+      return map;
+    }, {});
+    return Object.keys(mapFilters).reduce(function(matches, key) {
+      return matches && !mapFilters[key].reduce(function(selectionMatches, selection) {
+        return selectionMatches || (event[key] !== selection.value && selection.added) || (event[key] === selection.value && !selection.added);
+      }, false);
+    }, true);
+  };
+
+  $scope.uniqueJobs = function() {
+    return $scope.jobs.filter(function(job) {
+      return $scope.filteredEvents().filter(function(event) {
+        return event.job === job.id;
+      }).length !== 0;
+    });
+  };
+
+  $scope.jobEventCount = function(job) {
+    return $scope.filteredEvents().filter(function(event) {
+      return event.job === job.id;
+    }).length;
+  };
+
+  $scope.uniqueEventTypes = function() {
+    return $scope.eventTypes.filter(function(type) {
+      return $scope.filteredEvents().filter(function(event) {
+        return event.alarm === type.alarm;
+      }).length !== 0;
+    });
+  };
+
+  $scope.eventTypeCount = function(eventType) {
+    return $scope.filteredEvents().filter(function(event) {
+      return event.alarm === eventType.alarm;
+    }).length;
+  };
+}])
+
+.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   $routeProvider
   .when('/', {
       templateUrl : "/templates/index.html"
+  })
+ .when('/events', {
+    templateUrl: '/templates/events.html',
+    controller: 'EventController'
   })
  .when('/job/:jobId', {
     templateUrl: '/templates/job.html',
@@ -188,4 +387,4 @@ angular
     templateUrl: '/templates/help.html',
     controller: 'HelpController'
   });
-});
+}]);

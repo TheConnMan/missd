@@ -5,6 +5,9 @@ module.exports.policies = {
   'JobController': {
     '*': 'isAuthenticated'
   },
+  'EventController': {
+    '*': 'isAuthenticated'
+  },
   'KeyController': {
     '*': 'isAuthenticated'
   },

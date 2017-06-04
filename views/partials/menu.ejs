@@ -4,6 +4,10 @@
     Home
   </a>
   <% if (user) { %>
+    <a class="item" ng-click="eventTable()">
+      <i class="table icon"></i>
+      Events
+    </a>
     <a class="item" ng-click="help()">
       <i class="question icon"></i>
       Help
@@ -15,18 +19,20 @@
         <i class="user icon"></i>
         <%= user.name %>
       </div>
+      <a onclick="logout()" href="#" class="item">
+        <i class="sign out icon"></i>
+        Logout
+      </a>
+      <a class="ui item" href="<%= sails.config.globals.versionLink %>" target="_blank">
+        Miss.d v<%= sails.config.globals.version %>
+      </a>
+      <a class="icon item" href="https://github.com/TheConnMan/missd/issues" target="_blank" title="Open an Issue">
+        <i class="large github icon"></i>
+      </a>
     <% } else { %>
       <a class="item" href="/auths/github">
         <i class="user icon"></i>
         Log In
-      </a>
-    <% } %>
-    <div class="item">
-      v<%= sails.config.globals.version %>
-    </div>
-    <% if (user) { %>
-      <a onclick="logout()" href="#" class="item">
-        Logout
       </a>
     <% } %>
   </div>

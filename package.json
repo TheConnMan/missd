@@ -1,13 +1,16 @@
 {
   "name": "Miss.d",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Notifications for when events don't happen",
   "dependencies": {
     "bluebird": "^3.4.7",
     "dateformat": "^2.0.0",
+    "db-migrate": "^0.10.0-beta.20",
+    "db-migrate-mysql": "^1.1.10",
     "ejs": "2.3.4",
+    "email-templates": "^2.5.4",
     "express-http-proxy": "^0.11.0",
-    "fluent-logger": "^2.2.0",
+    "fluent-logger": "github:theconnman/fluent-logger-node",
     "grunt": "1.0.1",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-coffee": "1.0.0",
@@ -29,13 +32,17 @@
     "passport-github2": "^0.1.10",
     "rc": "1.0.1",
     "sails": "~0.12.7",
+    "sails-db-migrate": "^1.5.0",
     "sails-disk": "~0.10.9",
     "sails-mysql": "^0.11.5",
+    "sails-persistence-logger": "^0.2.0",
     "slack-webhook": "^1.0.0"
   },
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js",
+    "prod": "node app.js --prod",
+    "migrate": "grunt db:migrate:up",
     "dev": "nodemon app.js"
   },
   "main": "app.js",

@@ -1,6 +1,6 @@
-FROM alpine
+FROM alpine:3.4
 
-RUN apk add --no-cache nodejs
+RUN apk add --no-cache nodejs git
 
 WORKDIR /usr/src/app
 
@@ -11,4 +11,4 @@ COPY . /usr/src/app
 
 EXPOSE 1337
 
-CMD npm start
+CMD if [[ -z "${MYSQL_HOST}" ]]; then npm start; else npm run migrate && npm start; fi

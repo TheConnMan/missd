@@ -18,7 +18,15 @@ var timer = new Timer({
       .then(job => {
         logger.info('Processing ' + job.id + ' (' + job.name + ')');
         job.expired = true;
-        return Promise.all([job.save(), ExportService.process(job, job.notifications)]);
+        return Promise.all([
+          Event.create({
+            job: job,
+            user: job.user,
+            alarm: true
+          }),
+          job.save(),
+          ExportService.process(job, job.notifications)
+        ]);
       });
     }
   }
@@ -27,7 +35,6 @@ var timer = new Timer({
 module.exports = {
   process: function(key) {
     return Job.findOne({ key: key }).populate('notifications').then((job) => {
-      logger.debug('Resetting ' + job.id + ' (' + job.name + ')');
       this.clear(job.id);
       this.kickoff(job);
       job.lastActive = new Date();
@@ -35,6 +42,11 @@ module.exports = {
       if (job.expired) {
         job.expired = false;
         promises.push(ExportService.process(job, job.notifications));
+        promises.push(Event.create({
+          job: job,
+          user: job.user,
+          alarm: false
+        }));
       }
       promises.push(job.save());
       return Promise.all(promises).then(() => {
@@ -44,13 +56,11 @@ module.exports = {
   },
 
   kickoff: function(job) {
-    logger.debug('Kicking off job ' + job.id + ' (' + job.name + ')');
     timer.clear('expire', job.id);
     timer.schedule('expire', job.id, job.timeout * 1000);
   },
 
   clear: function(id) {
-    logger.debug('Clearing job ' + id);
     timer.clear('expire', id);
   }
 };

@@ -1,5 +1,6 @@
 # Miss.d
-Notifications for when events *don't* happen
+
+Notifications for when events _don't_ happen
 
 ## Running
 
@@ -30,6 +31,7 @@ Finally, pass in the **SERVER_URL** variable as the full URL of your application
 For easier local dev you can copy /config/oauth.js to /config/local.js (which is under .gitignore) and replace the OAuth variables with you application credentials. This removes the need to run the app with the OAuth environment variables every time.
 
 You can also run the app with automatic restart on code change
+
 ```bash
 npm run dev
 ```
@@ -39,10 +41,11 @@ npm run dev
 Docker is the easiest way to run **Miss.d**. Run with `docker build -t missd .` and `docker run -d -p 80:80 missd`. The OAuth environment variables are omitted from the `docker run` command, so add them in once you have followed the above instructions (e.g. `docker run -d -e GITHUB_ID=[my-id] -e GITHUB_SECRET=[my-secret] -e SERVER_URL=http://127.0.0.1 -p 80:80 missd`).
 
 ## UI Proxy
+
 This API can be run with a separately hosted UI by proxying all non-API calls to the UI. Use the following environment variables to configure the proxy:
 
 - PROXY_ENABLED (default: false) - Toggle for the proxy
-- PROXY_URL (default: http://localhost:4200) - URL to proxy non-API requests to
+- PROXY_URL (default: <http://localhost:4200>) - URL to proxy non-API requests to
 
 ## Running with MySQL
 
@@ -59,10 +62,18 @@ The easiest way to run a MySQL instance is to run it in Docker using the followi
 docker run -d -p 3306:3306 -e MYSQL_DATABASE=sails -e MYSQL_USER=sails -e MYSQL_PASSWORD=sails -e MYSQL_RANDOM_ROOT_PASSWORD=true mysql
 ```
 
+### Developing with MySQL
+
+Using MySQL automatically sets the migration strategy to `safe`, so running with MySQL requires you to run `npm migrate` with the appropriate environment variables to bring the DB schema up to speed.
+
+When developing a new migration script run `grunt db:migrate:create --name=<migration-name>` and implement the `up` and `down` steps once the migration is created.
+
 ## Additional Environment Variables
+
 **NOTE:** If the AWS credentials and emails settings are not injected emails notifications will not be sent
 
 - FLUENTD_HOST - If provided this project will log through FluentD
+- FLUENTD_TAGS (Optional) Add FluentD context tags (format is tag:value,tag2:value2)
 - REDIS_HOST - Redis host location
 - AWS_ACCESS_KEY_ID (Optional) - AWS ID for sending SES email
 - AWS_SECRET_ACCESS_KEY (Optional) - AWS secret key for sending SES email

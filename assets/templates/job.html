@@ -31,6 +31,10 @@
       <button ng-if="!new" class="ui blue button" ng-disabled="!job.dirty" ng-click="save()">Save</button>
     </div>
   </div>
+  <div class="field">
+    <label>Description</label>
+    <textarea type="text" ng-model="job.description" ng-change="changeJob(job)"></textarea>
+  </div>
 </div>
 <h2 ng-if="!new" class="ui dividing header">Notifications</h2>
 <table ng-if="!new" class="ui celled striped table">

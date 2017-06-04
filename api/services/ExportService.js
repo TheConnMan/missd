@@ -7,20 +7,35 @@ var emailClient = sails.config.globals.emailEnabled ? ses.createClient({
 
 var dateFormat = require('dateformat');
 
+var EmailTemplate = require('email-templates').EmailTemplate;
+
+var alertTemplate = new EmailTemplate('templates/alert');
+
 var log4js = require('log4js');
 var logger = log4js.getLogger('api/services/ExportService');
 
-if (!emailClient) {
-  logger.warn('Email is not configured, email notifications will not be sent');
-}
-
 module.exports = {
-  slack: function(job, notification) {
+  init: function() {
+    if (!emailClient) {
+      logger.warn('Email is not configured, email notifications will not be sent');
+    }
+  },
+
+  slack: function(job, notification, data) {
     if (notification.data.slackUrl) {
       var slack = new SlackWebhook(notification.data.slackUrl);
       return slack.send({
-        text: getText(job, notification),
-        username: 'Miss.d'
+        username: 'Miss.d',
+        attachments: [{
+          color: data.color,
+          title: data.title,
+          text: data.description,
+          title_link: data.url,
+          fields:[{
+            title: 'Last Active',
+            value: data.lastActive
+          }]
+        }]
       });
     } else {
       logger.error('Slack notification requires a URL: ' + notification.id);
@@ -28,20 +43,29 @@ module.exports = {
     }
   },
 
-  email: function(job, notification) {
+  email: function(job, notification, data) {
     return new Promise((resolve, reject) => {
       if (emailClient) {
-        emailClient.sendEmail({
-          to: notification.data.email,
-          from: sails.config.globals.fromEmail,
-          subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
-          message: getText(job, notification)
-        }, (err, data, res) => {
+        alertTemplate.render({
+          job,
+          data
+        }, function(err, result) {
           if (err) {
-            logger.error(err);
             reject(err);
           } else {
-            resolve(data);
+            emailClient.sendEmail({
+              to: notification.data.email,
+              from: sails.config.globals.fromEmail,
+              subject: data.subject,
+              message: result.html
+            }, (err, data, res) => {
+              if (err) {
+                logger.error(err);
+                reject(err);
+              } else {
+                resolve(data);
+              }
+            });
           }
         });
       } else {
@@ -57,9 +81,20 @@ module.exports = {
 
   process: function(job, notifications) {
     return Promise.all(notifications.map(notification => {
-      logger.debug('Exporting ' + (job.expired ? 'expire' : 'reenable') + ' ' + notification.exportType + ' notification ' + notification.id);
+      logger.info('Exporting ' + (job.expired ? 'expire' : 'reenable') + ' ' + notification.exportType + ' notification ' + notification.id);
+      var data = {
+        username: 'Miss.d',
+        color: job.expired ? '#ff4444' : '#4DBD33',
+        title: job.name + ' ' + (job.expired ? 'Expired' : 'Reenabled'),
+        url: sails.config.serverUrl,
+        subject: 'Miss.d: ' + job.name + (job.expired ? ' Expiration' : ' Reenabled'),
+        description: job.description,
+        summary: job.name + ' has ' + (job.expired ? 'just expired' : 'been reenabled'),
+        message: getText(job, notification),
+        lastActive: job.lastActive ? dateFormat(job.lastActive, 'mm/dd/yyyy HH:MM Z') : 'Never'
+      };
       var fn = this[notification.exportType] || this.default;
-      return fn(job, notification);
+      return fn(job, notification, data);
     }));
   }
 };

@@ -1,0 +1,64 @@
+<h1 class="ui dividing header">Events</h1>
+<div class="ui grid">
+  <div class="six wide column">
+    <div class="ui segment">
+      <h2 class="ui dividing header">Filters</h2>
+      <div class="ui labels">
+        <a class="ui icon {{ filter.added ? 'green' : 'red' }} label" ng-repeat="filter in filters" ng-click="removeFilter(filter.field, filter.value, filter.added)">
+          <i class="remove icon"></i>
+          {{ filter.label }}
+        </a>
+      </div>
+      <h3 class="ui header">Event Type</h3>
+      <div class="ui divided list">
+        <div class=" item" ng-repeat="type in uniqueEventTypes() | orderBy: label">
+          <i class="inline plus link icon" ng-click="addFilter('alarm', type.alarm, 'Type: ' + (type.alarm ? 'Alarm' : 'Clear'), true)"></i>
+          <i class="inline minus link icon" ng-click="addFilter('alarm', type.alarm, 'Type: ' + (type.alarm ? 'Alarm' : 'Clear'), false)"></i>
+          <div class="ui large horizontal label">
+            {{ type.label }} ({{ eventTypeCount(type) }})
+          </div>
+        </div>
+      </div>
+      <h3 class="ui header">Jobs</h3>
+      <div class="ui divided list">
+        <div class=" item" ng-repeat="job in uniqueJobs() | orderBy: name track by job.id">
+          <i class="inline plus link icon" ng-click="addFilter('job', job.id, 'Job: ' + job.name, true)"></i>
+          <i class="inline minus link icon" ng-click="addFilter('job', job.id, 'Job: ' + job.name, false)"></i>
+          <div class="ui large horizontal label">
+            {{ job.name }} ({{ jobEventCount(job) }})
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ten wide column">
+    <table class="ui compact celled table">
+      <thead>
+        <tr>
+          <th>Event Date</th>
+          <th>Relative Date</th>
+          <th>Job</th>
+          <th>Period</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="event in filteredEvents() | orderBy: createdAt : true track by event.id" class="{{ event.alarm ? 'negative' : 'positive' }}">
+          <td>{{ formatDate(event.createdAt) }}</td>
+          <td>{{ relativeDate(event.createdAt) }}</td>
+          <td>
+            {{ getJob(event.job).name }}
+            <i class="edit link icon" style="float: right;" ng-click="edit(getJob(event.job))"></i>
+          </td>
+          <td>
+            {{ formatDuration(getJob(event.job).timeout * 1000) }}
+          </td>
+          <td class="center aligned">
+            <i class="{{ event.alarm ? 'alarm' : 'check' }} icon"></i>
+            {{ event.alarm ? 'Alarm' : 'Clear' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
