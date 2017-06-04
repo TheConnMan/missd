@@ -81,7 +81,7 @@ module.exports = {
 
   process: function(job, notifications) {
     return Promise.all(notifications.map(notification => {
-      logger.debug('Exporting ' + (job.expired ? 'expire' : 'reenable') + ' ' + notification.exportType + ' notification ' + notification.id);
+      logger.info('Exporting ' + (job.expired ? 'expire' : 'reenable') + ' ' + notification.exportType + ' notification ' + notification.id);
       var data = {
         username: 'Miss.d',
         color: job.expired ? '#ff4444' : '#4DBD33',

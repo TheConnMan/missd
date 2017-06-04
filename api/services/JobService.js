@@ -35,7 +35,6 @@ var timer = new Timer({
 module.exports = {
   process: function(key) {
     return Job.findOne({ key: key }).populate('notifications').then((job) => {
-      logger.debug('Resetting ' + job.id + ' (' + job.name + ')');
       this.clear(job.id);
       this.kickoff(job);
       job.lastActive = new Date();
@@ -57,13 +56,11 @@ module.exports = {
   },
 
   kickoff: function(job) {
-    logger.debug('Kicking off job ' + job.id + ' (' + job.name + ')');
     timer.clear('expire', job.id);
     timer.schedule('expire', job.id, job.timeout * 1000);
   },
 
   clear: function(id) {
-    logger.debug('Clearing job ' + id);
     timer.clear('expire', id);
   }
 };
