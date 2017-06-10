@@ -78,3 +78,5 @@ When developing a new migration script run `grunt db:migrate:create --name=<migr
 - AWS_ACCESS_KEY_ID (Optional) - AWS ID for sending SES email
 - AWS_SECRET_ACCESS_KEY (Optional) - AWS secret key for sending SES email
 - FROM_EMAIL (Optional) - Email address notifications will be from
+- STATSD_HOST (default: localhost) - StatsD hostname
+- STATSD_TAGS (Optional) - StatsD tags
