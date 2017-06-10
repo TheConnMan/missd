@@ -3,6 +3,8 @@ var passport = require('passport');
 var log4js = require('log4js');
 var logger = log4js.getLogger('api/controllers/AuthController');
 
+var statsd = sails.config.globals.statsd;
+
 module.exports = {
 
   index: function(req, res) {
@@ -10,6 +12,7 @@ module.exports = {
   },
 
   logout: function(req, res) {
+    statsd.increment('missd.counter.logouts');
     req.logout();
     res.redirect('/');
   },
@@ -25,6 +28,7 @@ module.exports = {
           return;
         }
 
+        statsd.increment('missd.counter.logins');
         logger.info(user.name + ' has logged in');
         res.redirect('/');
         return;

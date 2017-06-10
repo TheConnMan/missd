@@ -14,6 +14,8 @@ var alertTemplate = new EmailTemplate('templates/alert');
 var log4js = require('log4js');
 var logger = log4js.getLogger('api/services/ExportService');
 
+var statsd = sails.config.globals.statsd;
+
 module.exports = {
   init: function() {
     if (!emailClient) {
@@ -94,6 +96,8 @@ module.exports = {
         lastActive: job.lastActive ? dateFormat(job.lastActive, 'mm/dd/yyyy HH:MM Z') : 'Never'
       };
       var fn = this[notification.exportType] || this.default;
+      statsd.increment('missd.counter.export.total');
+      statsd.increment('missd.counter.export.' + notification.exportType);
       return fn(job, notification, data);
     }));
   }

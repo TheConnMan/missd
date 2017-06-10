@@ -5,6 +5,8 @@ var Timer = require('node-distributed-timer');
 var log4js = require('log4js');
 var logger = log4js.getLogger('api/services/JobService');
 
+var statsd = sails.config.globals.statsd;
+
 var timer = new Timer({
   connection: {
     host: sails.config.globals.redisHost
@@ -16,6 +18,7 @@ var timer = new Timer({
       })
       .populate('notifications')
       .then(job => {
+        statsd.increment('missd.counter.job.expired');
         logger.info('Processing ' + job.id + ' (' + job.name + ')');
         job.expired = true;
         return Promise.all([
@@ -34,12 +37,14 @@ var timer = new Timer({
 
 module.exports = {
   process: function(key) {
+    statsd.increment('missd.counter.job.payloads');
     return Job.findOne({ key: key }).populate('notifications').then((job) => {
       this.clear(job.id);
       this.kickoff(job);
       job.lastActive = new Date();
       var promises = [];
       if (job.expired) {
+        statsd.increment('missd.counter.job.reenabled');
         job.expired = false;
         promises.push(ExportService.process(job, job.notifications));
         promises.push(Event.create({

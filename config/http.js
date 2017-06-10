@@ -35,5 +35,6 @@ module.exports.http = {
         return sails.config.globals.proxyEnabled && req.path.match(/^\/(?!(auths|jobs|keys|notifications|users)).*/);
       }
     }));
+    app.use(sails.config.globals.statsd.helpers.getExpressMiddleware('missd'));
   }
 };
