@@ -1,5 +1,5 @@
-<h1 class="ui dividing header">Events</h1>
-<div class="ui grid">
+<h1 class="ui dividing header">Events - Past 7 Days</h1>
+<div ng-if="events.length !== 0" class="ui grid">
   <div class="six wide column">
     <div class="ui segment">
       <h2 class="ui dividing header">Filters</h2>
@@ -62,3 +62,10 @@
     </table>
   </div>
 </div>
+<h1 ng-if="events.length === 0" class="ui center aligned icon header">
+  <i class="circular green check icon"></i>
+  <div class="content">
+    No Recent Events
+    <div class="sub header">Everything's running smoothly, nothing to see here</div>
+  </div>
+</h1>
