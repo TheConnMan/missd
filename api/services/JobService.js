@@ -7,6 +7,21 @@ var logger = log4js.getLogger('api/services/JobService');
 
 var statsd = sails.config.globals.statsd;
 
+function expire(job) {
+  statsd.increment('missd.counter.job.expired');
+  logger.info('Processing ' + job.id + ' (' + job.name + ')');
+  job.expired = true;
+  return Promise.all([
+    Event.create({
+      job: job,
+      user: job.user,
+      alarm: true
+    }),
+    job.save(),
+    ExportService.process(job, job.notifications)
+  ]);
+}
+
 var timer = new Timer({
   connection: {
     host: sails.config.globals.redisHost
@@ -18,18 +33,7 @@ var timer = new Timer({
       })
       .populate('notifications')
       .then(job => {
-        statsd.increment('missd.counter.job.expired');
-        logger.info('Processing ' + job.id + ' (' + job.name + ')');
-        job.expired = true;
-        return Promise.all([
-          Event.create({
-            job: job,
-            user: job.user,
-            alarm: true
-          }),
-          job.save(),
-          ExportService.process(job, job.notifications)
-        ]);
+        expire(job);
       });
     }
   }
@@ -60,6 +64,10 @@ module.exports = {
     });
   },
 
+  getKeys: function() {
+    return timer.getKeys();
+  },
+
   kickoff: function(job) {
     timer.clear('expire', job.id);
     timer.schedule('expire', job.id, job.timeout * 1000);
@@ -67,5 +75,7 @@ module.exports = {
 
   clear: function(id) {
     timer.clear('expire', id);
-  }
+  },
+
+  expire
 };

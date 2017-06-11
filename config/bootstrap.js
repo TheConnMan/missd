@@ -73,15 +73,23 @@ module.exports.bootstrap = function(cb) {
     callbackURL: sails.config.serverUrl + '/auths/github/callback'
   }, verifyHandler));
 
-  Job.find({
-    expired: false
-  }).then(jobs => {
-    logger.info('Bootstrapping ' + jobs.length + ' job(s)');
-    jobs.forEach(job => {
-      logger.info('Bootstrapping off ' + job.id + ' (' + job.name + ')');
-      JobService.kickoff(job);
-    });
+  JobService.getKeys().then(keys => {
+    Job.find({
+      expired: false,
+      id: {
+        not: keys.map(key => key.id)
+      }
+    })
+    .populate('notifications')
+    .then(jobs => {
+      if (jobs.length !== 0) {
+        logger.warn(jobs.length + ' job(s) expired while Miss.d was down, sending notifications');
+        jobs.forEach(job => {
+          JobService.expire(job);
+        });
+      }
 
-    cb();
+      cb();
+    });
   });
 };
