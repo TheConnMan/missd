@@ -125,6 +125,10 @@ angular
     return serverUrl + '/ingest/' + key;
   };
 
+  $scope.expireUrl = function(key) {
+    return serverUrl + '/ingest/' + key + '/expire';
+  };
+
   var hours = Array.apply(null, Array(7 * 24)).map(function(val, i) {
     return moment().startOf('hour').subtract({
       hours: i

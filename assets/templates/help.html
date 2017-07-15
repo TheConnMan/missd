@@ -11,3 +11,7 @@
   <li>Send a POST to <a ng-href="{{ingestUrl('your-api-key')}}">{{ingestUrl('your-api-key')}}</a> after each job completion</li>
   <li>Don't worry about your job until you get a notification!</li>
 </ol>
+<h3 class="ui dividing header">Force Expiration</h3>
+<p>
+  To force expire a job (e.g. a job is in a known bad state) send a POST to <a ng-href="{{expireUrl('your-api-key')}}">{{expireUrl('your-api-key')}}</a>.
+</p>

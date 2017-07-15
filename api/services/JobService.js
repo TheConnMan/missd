@@ -58,9 +58,17 @@ module.exports = {
         }));
       }
       promises.push(job.save());
-      return Promise.all(promises).then(() => {
-        return 200;
-      });
+      return Promise.all(promises);
+    });
+  },
+
+  forceExpire: function(key) {
+    return Job.findOne({
+      key: key
+    })
+    .populate('notifications')
+    .then(job => {
+      return job.expired ? Promise.resolve() : expire(job);
     });
   },
 
