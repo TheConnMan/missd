@@ -74,12 +74,15 @@ module.exports.bootstrap = function(cb) {
   }, verifyHandler));
 
   JobService.getKeys().then(keys => {
-    Job.find({
-      expired: false,
-      id: {
+    var query = {
+      expired: false
+    };
+    if (keys.length != 0) {
+      query.id = {
         not: keys.map(key => key.id)
-      }
-    })
+      };
+    }
+    Job.find(query)
     .populate('notifications')
     .then(jobs => {
       if (jobs.length !== 0) {
