@@ -1,3 +1,4 @@
+var os = require('os');
 var passport = require('passport'), GitHubStrategy = require('passport-github2').Strategy;
 
 var log4js = require('log4js');
@@ -46,6 +47,7 @@ module.exports.bootstrap = function(cb) {
       return allTags;
     }, {});
     tags.function = 'Miss.d';
+    tags.hostname = os.hostname();
     log4js.addAppender(require('fluent-logger').support.log4jsAppender('api', {
       host: process.env.FLUENTD_HOST,
       timeout: 3.0,
