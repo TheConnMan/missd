@@ -24,7 +24,8 @@ function expire(job) {
 
 var timer = new Timer({
   connection: {
-    host: sails.config.globals.redisHost
+    host: sails.config.globals.redisHost,
+    port: sails.config.globals.redisPort
   },
   tasks: {
     expire: function(id) {
