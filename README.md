@@ -75,6 +75,8 @@ When developing a new migration script run `grunt db:migrate:create --name=<migr
 - FLUENTD_HOST - If provided this project will log through FluentD
 - FLUENTD_TAGS (Optional) Add FluentD context tags (format is tag:value,tag2:value2)
 - REDIS_HOST - Redis host location
+- REDIS_PORT (default: 6379) - Redis host location
+- REDIS_PASSWORD (Optional) - Redis password
 - AWS_ACCESS_KEY_ID (Optional) - AWS ID for sending SES email
 - AWS_SECRET_ACCESS_KEY (Optional) - AWS secret key for sending SES email
 - FROM_EMAIL (Optional) - Email address notifications will be from

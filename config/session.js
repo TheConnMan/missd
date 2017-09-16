@@ -57,9 +57,7 @@ module.exports.session = {
 
   host: process.env.REDIS_HOST,
   port: parseInt(process.env.REDIS_PORT || '6379'),
-  // ttl: <redis session TTL in seconds>,
-  // db: 0,
-  // pass: <redis auth password>,
+  pass: process.env.REDIS_PASSWORD || null,
   prefix: 'missd:',
 
 

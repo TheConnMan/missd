@@ -18,6 +18,7 @@ module.exports.globals = {
 
   redisHost: process.env.REDIS_HOST || 'localhost',
   redisPort: parseInt(process.env.REDIS_PORT || '6379'),
+  redisPassword: process.env.REDIS_PASSWORD,
 
   awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
   awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
